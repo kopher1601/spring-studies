@@ -18,7 +18,7 @@ class Calculator(
 
     fun divide(operand: Int) {
         if (operand == 0) {
-            throw IllegalArgumentException("Division by zero")
+            throw IllegalStateException("Division by zero")
         }
         this.number /= operand
     }
