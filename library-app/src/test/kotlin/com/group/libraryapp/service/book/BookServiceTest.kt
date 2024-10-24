@@ -97,5 +97,4 @@ class BookServiceTest @Autowired constructor(
         assertThat(results[0].isReturn).isTrue()
     }
 
-
 }
