@@ -77,7 +77,7 @@ class BookServiceTest @Autowired constructor(
 
         // expected
         assertThatThrownBy { bookService.loanBook(request) }
-            .hasMessage("진작 대출되어 있는 책입니다")
+            .hasMessage("진작 대출되어 있는 책입니다.")
     }
 
     @Test
