@@ -27,7 +27,7 @@ class UserService(
         return userRepository.findAll().map {
             // parameter 가 한 개면 it 으로 대체 가능
             // user -> UserResponse(user)
-            UserResponse(it)
+            UserResponse.of(it)
         }
     }
 
