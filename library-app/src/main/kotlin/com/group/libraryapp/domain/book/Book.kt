@@ -1,14 +1,13 @@
 package com.group.libraryapp.domain.book
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
 class Book(
     val name: String,
-    val type: String,
+
+    @Enumerated(EnumType.STRING)
+    val type: BookType,
 
     // 기본값을 받는 필드는 가장 밑에 두는게 코틀린의 관례이다.
     @Id
@@ -23,7 +22,7 @@ class Book(
     }
 
     companion object {
-        fun fixture(name: String = "책이름", type: String = "Computer", id: Long? = null): Book {
+        fun fixture(name: String = "책이름", type: BookType = BookType.COMPUTER, id: Long? = null): Book {
             return Book(
                 name = name,
                 type = type,
