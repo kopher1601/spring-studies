@@ -32,8 +32,8 @@ class BookController(
     }
 
     @GetMapping("/book/loan")
-    fun countLoanedBok(): Int {
-        return bookService.countLoanedBok()
+    fun countLoanedBok(): Long {
+        return bookService.countLoanedBook()
     }
 
     @GetMapping("/bok/stat")

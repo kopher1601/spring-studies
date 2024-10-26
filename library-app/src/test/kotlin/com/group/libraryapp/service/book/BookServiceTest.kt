@@ -115,7 +115,7 @@ class BookServiceTest @Autowired constructor(
         )
 
         // when
-        val result = bookService.countLoanedBok()
+        val result = bookService.countLoanedBook()
 
         // then
         assertThat(result).isEqualTo(1)
