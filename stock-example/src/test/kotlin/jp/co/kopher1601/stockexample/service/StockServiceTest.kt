@@ -8,15 +8,14 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.TestConstructor
-
-import kotlinx.coroutines.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 
 @SpringBootTest
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
-class StockServiceTest (
+class StockServiceTest(
     private val stockService: StockService,
+    private val pessimisticLockStockService: PessimisticLockStockService,
     private val stockRepository: StockRepository,
 ) {
 
@@ -52,8 +51,7 @@ class StockServiceTest (
         for (i in 0..threadCount) {
             executorService.submit {
                 try {
-//                    stockService.decrease(1L, 1L)
-                    stockService.decrease(1L, 1L)
+                    pessimisticLockStockService.decrease(1L, 1L)
                 } finally {
                     latch.countDown()
                 }
