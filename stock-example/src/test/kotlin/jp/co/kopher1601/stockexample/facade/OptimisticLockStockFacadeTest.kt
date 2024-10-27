@@ -1,24 +1,22 @@
-package jp.co.kopher1601.stockexample.service
+package jp.co.kopher1601.stockexample.facade
 
 import jp.co.kopher1601.stockexample.domain.Stock
 import jp.co.kopher1601.stockexample.repository.StockRepository
+import jp.co.kopher1601.stockexample.service.OptimisticLockStockService
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.TestConstructor
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 
 @SpringBootTest
-@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
-class StockServiceTest(
-    private val stockService: StockService,
-    private val pessimisticLockStockService: PessimisticLockStockService,
+class OptimisticLockStockFacadeTest @Autowired constructor(
+    private val optimisticLockStockFacade: OptimisticLockStockFacade,
     private val stockRepository: StockRepository,
 ) {
-
     @BeforeEach
     fun setUp() {
         stockRepository.saveAndFlush(Stock(1L, 100L, 0))
@@ -27,15 +25,6 @@ class StockServiceTest(
     @AfterEach
     fun tearDown() {
         stockRepository.deleteAll()
-    }
-
-    @Test
-    fun decrease() {
-        stockService.decrease(1L, 1L)
-
-        // 100 - 1 = 99
-        val stock = stockRepository.findById(1L).get()
-        assertEquals(99, stock.quantity)
     }
 
     @Test
@@ -51,7 +40,7 @@ class StockServiceTest(
         for (i in 0..threadCount) {
             executorService.submit {
                 try {
-                    pessimisticLockStockService.decrease(1L, 1L)
+                    optimisticLockStockFacade.decrease(1L, 1L)
                 } finally {
                     latch.countDown()
                 }
