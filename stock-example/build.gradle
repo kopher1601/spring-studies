@@ -30,8 +30,11 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
     // coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0'
+    // implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0'
 
 
     // for sprint
