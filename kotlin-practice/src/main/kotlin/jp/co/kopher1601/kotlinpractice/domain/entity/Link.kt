@@ -5,7 +5,10 @@ import jakarta.persistence.*
 @Entity
 class Link(
 
+    private val name: String,
+    private val content: String,
+    private val isActive: Boolean,
 
     @Id @Column(name = "link_id") @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    private val id: Long? = null,
 ): BaseEntity()
