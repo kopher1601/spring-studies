@@ -1,5 +1,6 @@
 package jp.co.kopher1601.springtxkotlin.propagation
 
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -8,6 +9,7 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.jdbc.datasource.DataSourceTransactionManager
 import org.springframework.transaction.PlatformTransactionManager
+import org.springframework.transaction.UnexpectedRollbackException
 import org.springframework.transaction.interceptor.DefaultTransactionAttribute
 import javax.sql.DataSource
 
@@ -120,6 +122,7 @@ class BasicTxTest{
         txManager.rollback(inner) // rollback-only 마크
 
         log.info("외부 트랜잭션 커밋")
-        txManager.commit(outer)
+        assertThatThrownBy { txManager.commit(outer) }
+            .isInstanceOf(UnexpectedRollbackException::class.java)
     }
 }
