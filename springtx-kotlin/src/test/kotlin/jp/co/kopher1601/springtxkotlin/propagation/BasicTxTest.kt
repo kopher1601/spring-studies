@@ -78,4 +78,20 @@ class BasicTxTest{
         txManager.rollback(status2)
 
     }
+
+    @Test
+    fun inner_commit() {
+        log.info("외부 트랜잭션 시작")
+        val outer = txManager.getTransaction(DefaultTransactionAttribute())
+        log.info("outer.isNewTransaction() = {}", outer.isNewTransaction)
+
+        log.info("내부 트랜잭션 시작")
+        val inner = txManager.getTransaction(DefaultTransactionAttribute())
+        log.info("inner.isNewTransaction() = {}", inner.isNewTransaction)
+        log.info("내부 트랜잭션 커밋")
+        txManager.commit(inner)
+
+        log.info("외부 트랜잭션 커밋")
+        txManager.commit(outer)
+    }
 }
