@@ -94,4 +94,32 @@ class BasicTxTest{
         log.info("외부 트랜잭션 커밋")
         txManager.commit(outer)
     }
+
+    @Test
+    fun outer_rollback() { // 전체 롤백
+        log.info("외부 트랜잭션 시작")
+        val outer = txManager.getTransaction(DefaultTransactionAttribute())
+
+        log.info("내부 트랜잭션 시작")
+        val inner = txManager.getTransaction(DefaultTransactionAttribute())
+        log.info("내부 트랜잭션 커밋")
+        txManager.commit(inner)
+
+        log.info("외부 트랜잭션 롤백")
+        txManager.rollback(outer)
+    }
+
+    @Test
+    fun inner_rollback() { // 전체 롤백
+        log.info("외부 트랜잭션 시작")
+        val outer = txManager.getTransaction(DefaultTransactionAttribute())
+
+        log.info("내부 트랜잭션 시작")
+        val inner = txManager.getTransaction(DefaultTransactionAttribute())
+        log.info("내부 트랜잭션 롤백")
+        txManager.rollback(inner) // rollback-only 마크
+
+        log.info("외부 트랜잭션 커밋")
+        txManager.commit(outer)
+    }
 }
