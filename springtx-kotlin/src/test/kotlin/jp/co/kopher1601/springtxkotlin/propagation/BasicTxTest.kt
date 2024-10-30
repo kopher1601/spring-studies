@@ -46,4 +46,36 @@ class BasicTxTest{
         txManager.rollback(status)
         log.info("트랜잭션 롤백 완료")
     }
+
+    @Test
+    fun double_commit() {
+        log.info("트랜잭션1 시작")
+        val status = txManager.getTransaction(DefaultTransactionAttribute())
+
+        log.info("트랜잭션1 커밋")
+        txManager.commit(status)
+
+        log.info("트랜잭션2 시작")
+        val status2 = txManager.getTransaction(DefaultTransactionAttribute())
+
+        log.info("트랜잭션2 커밋")
+        txManager.commit(status2)
+
+    }
+
+    @Test
+    fun double_commit_rollback() {
+        log.info("트랜잭션1 시작")
+        val status = txManager.getTransaction(DefaultTransactionAttribute())
+
+        log.info("트랜잭션1 커밋")
+        txManager.commit(status)
+
+        log.info("트랜잭션2 시작")
+        val status2 = txManager.getTransaction(DefaultTransactionAttribute())
+
+        log.info("트랜잭션2 롤백")
+        txManager.rollback(status2)
+
+    }
 }
