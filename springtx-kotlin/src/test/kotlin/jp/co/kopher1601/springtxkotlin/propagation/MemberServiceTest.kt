@@ -68,6 +68,42 @@ class MemberServiceTest @Autowired constructor(
         // then
         assertThat(memberRepository.find(username)).isNotNull()
         assertThat(logRepository.find(username)).isNotNull()
+    }
 
+    /**
+     * memberService        @Transactional: ON
+     * memberRepository     @Transactional: ON
+     * logRepository        @Transactional: ON
+     */
+    @Test
+    fun outerTxOn_success() {
+        // given
+        val username = "outerTxOn_success"
+
+        // when
+        memberService.joinV1(username)
+
+        // then
+        assertThat(memberRepository.find(username)).isNotNull()
+        assertThat(logRepository.find(username)).isNotNull()
+    }
+
+    /**
+     * memberService        @Transactional: On
+     * memberRepository     @Transactional: ON
+     * logRepository        @Transactional: ON
+     */
+    @Test
+    fun outerTxOn_fail() {
+        // given
+        val username = "로그예외_outerTxOn_fail"
+
+        // when
+        assertThatThrownBy { memberService.joinV1(username) }
+            .isInstanceOf(RuntimeException::class.java)
+
+        // then 모든 데이터가 롤백
+        assertThat(memberRepository.find(username)).isNull()
+        assertThat(logRepository.find(username)).isNull()
     }
 }
