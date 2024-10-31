@@ -28,6 +28,7 @@ class MemberService @Autowired constructor(
 
     }
 
+    @Transactional
     fun joinV2(username: String) {
         val member = Member(username)
         val logMessage = Log(username)
