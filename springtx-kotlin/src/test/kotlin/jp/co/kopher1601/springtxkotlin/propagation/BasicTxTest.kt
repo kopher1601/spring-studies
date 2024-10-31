@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.jdbc.datasource.DataSourceTransactionManager
 import org.springframework.transaction.PlatformTransactionManager
+import org.springframework.transaction.TransactionDefinition
 import org.springframework.transaction.UnexpectedRollbackException
 import org.springframework.transaction.interceptor.DefaultTransactionAttribute
 import javax.sql.DataSource
@@ -124,5 +125,23 @@ class BasicTxTest{
         log.info("외부 트랜잭션 커밋")
         assertThatThrownBy { txManager.commit(outer) }
             .isInstanceOf(UnexpectedRollbackException::class.java)
+    }
+
+    @Test
+    fun inner_rollback_required_new() {
+        log.info("외부 트랜잭션 시작")
+        val outer = txManager.getTransaction(DefaultTransactionAttribute())
+        log.info("outer.isNewTransaction() = {}", outer.isNewTransaction)
+
+        log.info("내부 트랜잭션 시작")
+        // basic 은 REQUIRED -> PROPAGATION_REQUIRES_NEW 로 변경
+        val inner = txManager.getTransaction(DefaultTransactionAttribute(TransactionDefinition.PROPAGATION_REQUIRES_NEW))
+        log.info("inner.isNewTransaction() = {}", inner.isNewTransaction)
+
+        log.info("내부 트랜잭션 롤백")
+        txManager.rollback(inner)
+
+        log.info("외부 트랜잭션 커밋")
+        txManager.commit(outer)
     }
 }
