@@ -3,6 +3,7 @@ package jp.co.kopher1601.springtxkotlin.propagation
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class MemberService @Autowired constructor(
@@ -12,6 +13,7 @@ class MemberService @Autowired constructor(
 
     val log = LoggerFactory.getLogger(this::class.java)
 
+    @Transactional
     fun joinV1(username: String) {
         val member = Member(username)
         val logMessage = Log(username)

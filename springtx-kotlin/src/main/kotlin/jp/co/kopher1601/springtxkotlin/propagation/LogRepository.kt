@@ -4,7 +4,6 @@ import jakarta.persistence.EntityManager
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
-import org.springframework.transaction.annotation.Transactional
 
 @Repository
 class LogRepository @Autowired constructor(
@@ -13,7 +12,7 @@ class LogRepository @Autowired constructor(
 
     val log = LoggerFactory.getLogger(this::class.java)
 
-    @Transactional
+//    @Transactional
     fun save(logMessage: Log) {
         log.info("log 저장")
         em.persist(logMessage)

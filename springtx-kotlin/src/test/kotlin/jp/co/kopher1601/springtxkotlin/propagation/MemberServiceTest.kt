@@ -1,6 +1,7 @@
 package jp.co.kopher1601.springtxkotlin.propagation
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -25,9 +26,48 @@ class MemberServiceTest @Autowired constructor(
         // when
         memberService.joinV1(username)
 
-        // then
+        // then 정상저장
         assertThat(memberRepository.find(username)).isNotNull
         assertThat(logRepository.find(username)).isNotNull
+
+    }
+
+    /**
+     * memberService        @Transactional: OFF
+     * memberRepository     @Transactional: ON
+     * logRepository        @Transactional: ON
+     */
+    @Test
+    fun outerTxOff_fail() {
+        // given
+        val username = "로그예외_outerTxOff_success"
+
+        // when
+        assertThatThrownBy { memberService.joinV1(username) }
+            .isInstanceOf(RuntimeException::class.java)
+
+        // then
+        assertThat(memberRepository.find(username)).isNotNull()
+        assertThat(logRepository.find(username)).isNull()
+
+    }
+
+    /**
+     * memberService        @Transactional: ON
+     * memberRepository     @Transactional: OFF
+     * logRepository        @Transactional: OFF
+     */
+    @Test
+    fun singleTx() {
+        // given
+        val username = "outerTxOn_success"
+
+        // when
+        memberService.joinV1(username)
+
+        // then
+        assertThat(memberRepository.find(username)).isNotNull()
+        assertThat(logRepository.find(username)).isNotNull()
 
     }
 }
