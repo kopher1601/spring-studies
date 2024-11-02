@@ -37,11 +37,11 @@ class PostServiceTest @Autowired constructor(
         val savedPost = postRepository.save(Post("foo", "bar"))
 
         // when
-        val post = postService.get(savedPost.id!!)
+        val postResponse = postService.get(savedPost.id!!)
 
         // then
-        assertThat(post).isNotNull()
-        assertThat(post.title).isEqualTo("foo")
-        assertThat(post.content).isEqualTo("bar")
+        assertThat(postResponse).isNotNull()
+        assertThat(postResponse.title).isEqualTo("foo")
+        assertThat(postResponse.content).isEqualTo("bar")
     }
 }

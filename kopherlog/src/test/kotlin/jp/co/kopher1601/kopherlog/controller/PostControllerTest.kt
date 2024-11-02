@@ -52,13 +52,13 @@ class PostControllerTest @Autowired constructor(
     @DisplayName("글 한 개 조회")
     fun test4() {
         // given
-        val savedPost = postRepository.save(Post("foo", "bar"))
+        val savedPost = postRepository.save(Post("12345678901234", "bar"))
 
         // expected
         mvc.perform(MockMvcRequestBuilders.get("/posts/{postId}", savedPost.id)
             .contentType(APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.title").value("foo"))
+            .andExpect(jsonPath("$.title").value("1234567890"))
             .andExpect(jsonPath("$.content").value("bar"))
             .andDo(MockMvcResultHandlers.print())
     }

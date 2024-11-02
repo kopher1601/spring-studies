@@ -1,7 +1,7 @@
 package jp.co.kopher1601.kopherlog.controller
 
-import jp.co.kopher1601.kopherlog.domain.Post
 import jp.co.kopher1601.kopherlog.request.PostCreate
+import jp.co.kopher1601.kopherlog.response.PostResponse
 import jp.co.kopher1601.kopherlog.service.PostService
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
@@ -18,7 +18,7 @@ class PostController(
     }
 
     @GetMapping("/posts/{postId}")
-    fun get(@PathVariable("postId") id: Long): Post {
+    fun get(@PathVariable("postId") id: Long): PostResponse {
          return postService.get(id)
     }
 }
