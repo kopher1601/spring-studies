@@ -62,4 +62,21 @@ class PostControllerTest @Autowired constructor(
             .andExpect(jsonPath("$.content").value("bar"))
             .andDo(MockMvcResultHandlers.print())
     }
+
+    @Test
+    @DisplayName("글 여러 개 조회")
+    fun test5() {
+        // given
+        postRepository.save(Post("12345678901234", "bar1"))
+        postRepository.save(Post("12345678901234", "bar2"))
+
+        // expected
+        mvc.perform(MockMvcRequestBuilders.get("/posts")
+            .contentType(APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.size()").value(2))
+            .andExpect(jsonPath("$[0].title").value("1234567890"))
+            .andExpect(jsonPath("$[0].content").value("bar1"))
+            .andDo(MockMvcResultHandlers.print())
+    }
 }

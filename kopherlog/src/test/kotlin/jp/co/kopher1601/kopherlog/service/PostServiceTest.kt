@@ -44,4 +44,19 @@ class PostServiceTest @Autowired constructor(
         assertThat(postResponse.title).isEqualTo("foo")
         assertThat(postResponse.content).isEqualTo("bar")
     }
+
+    @Test
+    @DisplayName("글 여러 개 조회")
+    fun test3() {
+        // given
+        postRepository.save(Post("foo1", "bar1"))
+        postRepository.save(Post("foo2", "bar2"))
+
+        // when
+        val postResponses = postService.getList()
+
+        // then
+        assertThat(postResponses).hasSize(2)
+
+    }
 }

@@ -28,4 +28,10 @@ class PostService(
             post.content,
         )
     }
+
+    fun getList(): List<PostResponse> {
+        return postRepository.findAll().map {
+            PostResponse(it.id!!, it.title, it.content)
+        }.toList()
+    }
 }

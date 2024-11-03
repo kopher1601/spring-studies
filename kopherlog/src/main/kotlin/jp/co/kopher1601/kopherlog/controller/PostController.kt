@@ -19,6 +19,11 @@ class PostController(
 
     @GetMapping("/posts/{postId}")
     fun get(@PathVariable("postId") id: Long): PostResponse {
-         return postService.get(id)
+        return postService.get(id)
+    }
+
+    @GetMapping("/posts")
+    fun getList(): List<PostResponse> {
+        return postService.getList()
     }
 }
