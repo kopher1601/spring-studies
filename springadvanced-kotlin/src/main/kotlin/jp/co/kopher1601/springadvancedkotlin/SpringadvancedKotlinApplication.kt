@@ -1,11 +1,12 @@
 package jp.co.kopher1601.springadvancedkotlin
 
 import jp.co.kopher1601.springadvancedkotlin.config.AppV1Config
+import jp.co.kopher1601.springadvancedkotlin.config.AppV2Config
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Import
 
-@Import(AppV1Config::class)
+@Import(AppV2Config::class, AppV1Config::class)
 @SpringBootApplication(scanBasePackages = ["jp.co.kopher1601.springadvancedkotlin.app"])
 class SpringadvancedKotlinApplication
 
