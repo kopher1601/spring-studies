@@ -8,7 +8,9 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.transaction.annotation.Transactional
 
+@Transactional
 @SpringBootTest
 class PostServiceTest @Autowired constructor(
     private val postService: PostService,
@@ -49,8 +51,8 @@ class PostServiceTest @Autowired constructor(
     @DisplayName("글 여러 개 조회")
     fun test3() {
         // given
-        postRepository.save(Post("foo1", "bar1"))
-        postRepository.save(Post("foo2", "bar2"))
+        postRepository
+            .saveAll(listOf(Post("foo1", "bar1"), Post("foo2", "bar2")))
 
         // when
         val postResponses = postService.getList()

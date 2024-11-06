@@ -6,6 +6,7 @@ import jp.co.kopher1601.kopherlog.repository.PostRepository
 import jp.co.kopher1601.kopherlog.request.PostCreate
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.tuple
+import org.hamcrest.Matchers
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,7 +18,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.transaction.annotation.Transactional
 
+@Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 class PostControllerTest @Autowired constructor(
@@ -67,16 +70,18 @@ class PostControllerTest @Autowired constructor(
     @DisplayName("글 여러 개 조회")
     fun test5() {
         // given
-        postRepository.save(Post("12345678901234", "bar1"))
-        postRepository.save(Post("12345678901234", "bar2"))
+        postRepository.save(Post("title_1", "bar1"))
+        postRepository.save(Post("title_2", "bar2"))
 
         // expected
         mvc.perform(MockMvcRequestBuilders.get("/posts")
             .contentType(APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.size()").value(2))
-            .andExpect(jsonPath("$[0].title").value("1234567890"))
+            .andExpect(jsonPath("$.size()", Matchers.`is`(2)))
+            .andExpect(jsonPath("$[0].title").value("title_1"))
             .andExpect(jsonPath("$[0].content").value("bar1"))
+            .andExpect(jsonPath("$[1].title").value("title_2"))
+            .andExpect(jsonPath("$[1].content").value("bar2"))
             .andDo(MockMvcResultHandlers.print())
     }
 }
