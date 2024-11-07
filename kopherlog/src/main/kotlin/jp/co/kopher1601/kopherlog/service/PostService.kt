@@ -5,6 +5,7 @@ import jp.co.kopher1601.kopherlog.repository.PostRepository
 import jp.co.kopher1601.kopherlog.request.PostCreate
 import jp.co.kopher1601.kopherlog.response.PostResponse
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -29,8 +30,8 @@ class PostService(
         )
     }
 
-    fun getList(): List<PostResponse> {
-        return postRepository.findAll().map {
+    fun getList(pageable: Pageable): List<PostResponse> {
+        return postRepository.findAll(pageable).map {
             PostResponse(it.id!!, it.title, it.content)
         }.toList()
     }

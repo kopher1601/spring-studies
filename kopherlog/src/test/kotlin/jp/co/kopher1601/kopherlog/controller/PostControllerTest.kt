@@ -70,18 +70,23 @@ class PostControllerTest @Autowired constructor(
     @DisplayName("글 여러 개 조회")
     fun test5() {
         // given
-        postRepository.save(Post("title_1", "bar1"))
-        postRepository.save(Post("title_2", "bar2"))
+        val requestPosts = (0 until 30).map { i ->
+            Post(
+                title = "코퍼로그 $i",
+                content = "키치죠지맨선 $i"
+            )
+        }.toList()
+        postRepository.saveAll(requestPosts)
 
         // expected
-        mvc.perform(MockMvcRequestBuilders.get("/posts")
+        mvc.perform(MockMvcRequestBuilders.get("/posts?page=1&sort=id,desc&size=10")
             .contentType(APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.size()", Matchers.`is`(2)))
-            .andExpect(jsonPath("$[0].title").value("title_1"))
-            .andExpect(jsonPath("$[0].content").value("bar1"))
-            .andExpect(jsonPath("$[1].title").value("title_2"))
-            .andExpect(jsonPath("$[1].content").value("bar2"))
+            .andExpect(jsonPath("$.size()", Matchers.`is`(10)))
+            .andExpect(jsonPath("$[0].title").value("코퍼로그 29"))
+            .andExpect(jsonPath("$[0].content").value("키치죠지맨선 29"))
+            .andExpect(jsonPath("$[1].title").value("코퍼로그 28"))
+            .andExpect(jsonPath("$[1].content").value("키치죠지맨선 28"))
             .andDo(MockMvcResultHandlers.print())
     }
 }
