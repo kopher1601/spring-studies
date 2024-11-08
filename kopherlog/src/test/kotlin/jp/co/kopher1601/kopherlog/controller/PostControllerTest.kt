@@ -79,10 +79,34 @@ class PostControllerTest @Autowired constructor(
         postRepository.saveAll(requestPosts)
 
         // expected
-        mvc.perform(MockMvcRequestBuilders.get("/posts?page=1&sort=id,desc&size=10")
+        mvc.perform(MockMvcRequestBuilders.get("/posts?page=2&size=5")
             .contentType(APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.size()", Matchers.`is`(10)))
+            .andExpect(jsonPath("$.size()", Matchers.`is`(5)))
+            .andExpect(jsonPath("$[0].title").value("코퍼로그 24"))
+            .andExpect(jsonPath("$[0].content").value("키치죠지맨선 24"))
+            .andExpect(jsonPath("$[1].title").value("코퍼로그 23"))
+            .andExpect(jsonPath("$[1].content").value("키치죠지맨선 23"))
+            .andDo(MockMvcResultHandlers.print())
+    }
+
+    @Test
+    @DisplayName("패이지를 0 으로 요청하면 첫 페이지를 가져온다")
+    fun test6() {
+        // given
+        val requestPosts = (0 until 30).map { i ->
+            Post(
+                title = "코퍼로그 $i",
+                content = "키치죠지맨선 $i"
+            )
+        }.toList()
+        postRepository.saveAll(requestPosts)
+
+        // expected
+        mvc.perform(MockMvcRequestBuilders.get("/posts?page=0&size=5")
+            .contentType(APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.size()", Matchers.`is`(5)))
             .andExpect(jsonPath("$[0].title").value("코퍼로그 29"))
             .andExpect(jsonPath("$[0].content").value("키치죠지맨선 29"))
             .andExpect(jsonPath("$[1].title").value("코퍼로그 28"))
