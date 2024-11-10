@@ -3,12 +3,14 @@ package jp.co.kopher1601.kopherlog.service
 import jp.co.kopher1601.kopherlog.domain.Post
 import jp.co.kopher1601.kopherlog.repository.PostRepository
 import jp.co.kopher1601.kopherlog.request.PostCreate
+import jp.co.kopher1601.kopherlog.request.PostEdit
 import jp.co.kopher1601.kopherlog.request.PostSearch
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.transaction.annotation.Transactional
 
 @Transactional
@@ -54,8 +56,8 @@ class PostServiceTest @Autowired constructor(
         // given
         val requestPosts = (0 until 20).map { i ->
             Post(
-                title = "코퍼로그 $i",
-                content = "키치죠지맨선 $i"
+                _title = "코퍼로그 $i",
+                _content = "키치죠지맨선 $i"
             )
         }.toList()
         postRepository.saveAll(requestPosts)
@@ -69,4 +71,24 @@ class PostServiceTest @Autowired constructor(
         assertThat(postResponses[1].title).isEqualTo("코퍼로그 18")
 
     }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    fun test4() {
+        // given
+        val savedPost = postRepository.save(Post("foo", "bar"))
+        val postEdit = PostEdit(
+            title = "코퍼로그"
+        )
+
+        // when
+        postService.edit(savedPost.id!!, postEdit)
+
+        // then
+        val foundPost = postRepository.findByIdOrNull(savedPost.id!!)
+        assertThat(foundPost).isNotNull()
+        assertThat(foundPost?.title).isEqualTo("코퍼로그")
+        assertThat(foundPost?.content).isEqualTo("bar")
+    }
+
 }

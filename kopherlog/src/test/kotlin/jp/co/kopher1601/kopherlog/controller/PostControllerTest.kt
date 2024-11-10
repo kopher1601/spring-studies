@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import jp.co.kopher1601.kopherlog.domain.Post
 import jp.co.kopher1601.kopherlog.repository.PostRepository
 import jp.co.kopher1601.kopherlog.request.PostCreate
+import jp.co.kopher1601.kopherlog.request.PostEdit
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.tuple
 import org.hamcrest.Matchers
@@ -58,8 +59,10 @@ class PostControllerTest @Autowired constructor(
         val savedPost = postRepository.save(Post("12345678901234", "bar"))
 
         // expected
-        mvc.perform(MockMvcRequestBuilders.get("/posts/{postId}", savedPost.id)
-            .contentType(APPLICATION_JSON))
+        mvc.perform(
+            MockMvcRequestBuilders.get("/posts/{postId}", savedPost.id)
+                .contentType(APPLICATION_JSON)
+        )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.title").value("1234567890"))
             .andExpect(jsonPath("$.content").value("bar"))
@@ -72,15 +75,17 @@ class PostControllerTest @Autowired constructor(
         // given
         val requestPosts = (0 until 30).map { i ->
             Post(
-                title = "코퍼로그 $i",
-                content = "키치죠지맨선 $i"
+                _title = "코퍼로그 $i",
+                _content = "키치죠지맨선 $i"
             )
         }.toList()
         postRepository.saveAll(requestPosts)
 
         // expected
-        mvc.perform(MockMvcRequestBuilders.get("/posts?page=2&size=5")
-            .contentType(APPLICATION_JSON))
+        mvc.perform(
+            MockMvcRequestBuilders.get("/posts?page=2&size=5")
+                .contentType(APPLICATION_JSON)
+        )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.size()", Matchers.`is`(5)))
             .andExpect(jsonPath("$[0].title").value("코퍼로그 24"))
@@ -96,21 +101,45 @@ class PostControllerTest @Autowired constructor(
         // given
         val requestPosts = (0 until 30).map { i ->
             Post(
-                title = "코퍼로그 $i",
-                content = "키치죠지맨선 $i"
+                _title = "코퍼로그 $i",
+                _content = "키치죠지맨선 $i"
             )
         }.toList()
         postRepository.saveAll(requestPosts)
 
         // expected
-        mvc.perform(MockMvcRequestBuilders.get("/posts?page=0&size=5")
-            .contentType(APPLICATION_JSON))
+        mvc.perform(
+            MockMvcRequestBuilders.get("/posts?page=0&size=5")
+                .contentType(APPLICATION_JSON)
+        )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.size()", Matchers.`is`(5)))
             .andExpect(jsonPath("$[0].title").value("코퍼로그 29"))
             .andExpect(jsonPath("$[0].content").value("키치죠지맨선 29"))
             .andExpect(jsonPath("$[1].title").value("코퍼로그 28"))
             .andExpect(jsonPath("$[1].content").value("키치죠지맨선 28"))
+            .andDo(MockMvcResultHandlers.print())
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    fun test7() {
+        // given
+        val savedPost = postRepository.save(Post("키치죠지맨션", "사고싶다"))
+
+        val postEdit = PostEdit(
+            title = "무사시사카이라도 좋아요",
+            content = "사고싶다"
+        )
+        val jsonString = objectMapper.writeValueAsString(postEdit)
+
+        // when
+        mvc.perform(
+            MockMvcRequestBuilders.patch("/posts/{savedPost.id}", savedPost.id)
+                .contentType(APPLICATION_JSON)
+                .content(jsonString)
+        )
+            .andExpect(status().isOk())
             .andDo(MockMvcResultHandlers.print())
     }
 }

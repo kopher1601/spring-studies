@@ -1,6 +1,7 @@
 package jp.co.kopher1601.kopherlog.controller
 
 import jp.co.kopher1601.kopherlog.request.PostCreate
+import jp.co.kopher1601.kopherlog.request.PostEdit
 import jp.co.kopher1601.kopherlog.request.PostSearch
 import jp.co.kopher1601.kopherlog.response.PostResponse
 import jp.co.kopher1601.kopherlog.service.PostService
@@ -26,5 +27,10 @@ class PostController(
     @GetMapping("/posts")
     fun getList(@ModelAttribute postSearch: PostSearch): List<PostResponse> {
         return postService.getList(postSearch)
+    }
+
+    @PatchMapping("/posts/{postId}")
+    fun editPost(@PathVariable postId: Long, @RequestBody @Validated postEdit: PostEdit) {
+        postService.edit(postId, postEdit)
     }
 }
