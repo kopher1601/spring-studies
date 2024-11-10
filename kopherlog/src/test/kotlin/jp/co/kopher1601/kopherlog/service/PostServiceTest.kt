@@ -91,4 +91,18 @@ class PostServiceTest @Autowired constructor(
         assertThat(foundPost?.content).isEqualTo("bar")
     }
 
+    @Test
+    @DisplayName("게시글 삭제")
+    fun test5() {
+        // given
+        val savedPost = postRepository.save(Post("foo", "bar"))
+
+        // when
+        postService.delete(savedPost.id!!)
+
+        // then
+        val count = postRepository.count()
+        assertThat(count).isEqualTo(0)
+    }
+
 }

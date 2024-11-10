@@ -45,4 +45,11 @@ class PostService(
             ?: throw IllegalStateException("Post not found")
         foundPost.update(postEdit)
     }
+
+    fun delete(postId: Long) {
+        val foundPost = (postRepository.findByIdOrNull(postId)
+            ?: throw IllegalStateException("Post not found"))
+
+        postRepository.delete(foundPost)
+    }
 }

@@ -15,8 +15,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
@@ -38,12 +38,12 @@ class PostControllerTest @Autowired constructor(
 
         // when
         mvc.perform(
-            MockMvcRequestBuilders.post("/posts")
+            post("/posts")
                 .contentType(APPLICATION_JSON)
                 .content(jsonString)
         )
             .andExpect(status().isCreated())
-            .andDo(MockMvcResultHandlers.print())
+            .andDo(print())
 
         // then
         assertThat(postRepository.findAll())
@@ -60,13 +60,13 @@ class PostControllerTest @Autowired constructor(
 
         // expected
         mvc.perform(
-            MockMvcRequestBuilders.get("/posts/{postId}", savedPost.id)
+            get("/posts/{postId}", savedPost.id)
                 .contentType(APPLICATION_JSON)
         )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.title").value("1234567890"))
             .andExpect(jsonPath("$.content").value("bar"))
-            .andDo(MockMvcResultHandlers.print())
+            .andDo(print())
     }
 
     @Test
@@ -83,7 +83,7 @@ class PostControllerTest @Autowired constructor(
 
         // expected
         mvc.perform(
-            MockMvcRequestBuilders.get("/posts?page=2&size=5")
+            get("/posts?page=2&size=5")
                 .contentType(APPLICATION_JSON)
         )
             .andExpect(status().isOk())
@@ -92,7 +92,7 @@ class PostControllerTest @Autowired constructor(
             .andExpect(jsonPath("$[0].content").value("키치죠지맨선 24"))
             .andExpect(jsonPath("$[1].title").value("코퍼로그 23"))
             .andExpect(jsonPath("$[1].content").value("키치죠지맨선 23"))
-            .andDo(MockMvcResultHandlers.print())
+            .andDo(print())
     }
 
     @Test
@@ -109,7 +109,7 @@ class PostControllerTest @Autowired constructor(
 
         // expected
         mvc.perform(
-            MockMvcRequestBuilders.get("/posts?page=0&size=5")
+            get("/posts?page=0&size=5")
                 .contentType(APPLICATION_JSON)
         )
             .andExpect(status().isOk())
@@ -118,7 +118,7 @@ class PostControllerTest @Autowired constructor(
             .andExpect(jsonPath("$[0].content").value("키치죠지맨선 29"))
             .andExpect(jsonPath("$[1].title").value("코퍼로그 28"))
             .andExpect(jsonPath("$[1].content").value("키치죠지맨선 28"))
-            .andDo(MockMvcResultHandlers.print())
+            .andDo(print())
     }
 
     @Test
@@ -135,11 +135,26 @@ class PostControllerTest @Autowired constructor(
 
         // when
         mvc.perform(
-            MockMvcRequestBuilders.patch("/posts/{savedPost.id}", savedPost.id)
+            patch("/posts/{savedPost.id}", savedPost.id)
                 .contentType(APPLICATION_JSON)
                 .content(jsonString)
         )
             .andExpect(status().isOk())
-            .andDo(MockMvcResultHandlers.print())
+            .andDo(print())
+    }
+
+    @Test
+    @DisplayName("글 제목 삭제")
+    fun test8() {
+        // given
+        val savedPost = postRepository.save(Post("키치죠지맨션", "사고싶다"))
+
+        // when
+        mvc.perform(
+            delete("/posts/{savedPost.id}", savedPost.id)
+                .contentType(APPLICATION_JSON)
+        )
+            .andExpect(status().isOk())
+            .andDo(print())
     }
 }

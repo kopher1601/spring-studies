@@ -33,4 +33,9 @@ class PostController(
     fun editPost(@PathVariable postId: Long, @RequestBody @Validated postEdit: PostEdit) {
         postService.edit(postId, postEdit)
     }
+
+    @DeleteMapping("/posts/{postId}")
+    fun delete(@PathVariable("postId") postId: Long) {
+        postService.delete(postId)
+    }
 }
