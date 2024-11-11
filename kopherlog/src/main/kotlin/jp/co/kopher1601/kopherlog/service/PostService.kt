@@ -1,12 +1,12 @@
 package jp.co.kopher1601.kopherlog.service
 
 import jp.co.kopher1601.kopherlog.domain.Post
+import jp.co.kopher1601.kopherlog.exception.PostNotFound
 import jp.co.kopher1601.kopherlog.repository.PostRepository
 import jp.co.kopher1601.kopherlog.request.PostCreate
 import jp.co.kopher1601.kopherlog.request.PostEdit
 import jp.co.kopher1601.kopherlog.request.PostSearch
 import jp.co.kopher1601.kopherlog.response.PostResponse
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -24,7 +24,7 @@ class PostService(
 
     fun get(id: Long): PostResponse {
         val post = (postRepository.findByIdOrNull(id)
-            ?: throw NotFoundException())
+            ?: throw PostNotFound())
 
         return PostResponse(
             post.id!!,
@@ -42,13 +42,14 @@ class PostService(
     @Transactional
     fun edit(id: Long, postEdit: PostEdit) {
         val foundPost = postRepository.findByIdOrNull(id)
-            ?: throw IllegalStateException("Post not found")
+            ?: throw PostNotFound()
         foundPost.update(postEdit)
     }
 
+    @Transactional
     fun delete(postId: Long) {
         val foundPost = (postRepository.findByIdOrNull(postId)
-            ?: throw IllegalStateException("Post not found"))
+            ?: throw PostNotFound())
 
         postRepository.delete(foundPost)
     }

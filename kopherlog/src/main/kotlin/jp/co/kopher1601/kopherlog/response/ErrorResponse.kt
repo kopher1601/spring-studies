@@ -10,9 +10,9 @@ package jp.co.kopher1601.kopherlog.response
  * }
  */
 data class ErrorResponse(
-    private val code: String,
-    private val message: String,
-    private val validationErrors: MutableMap<String, String> = mutableMapOf()
+    val code: String,
+    val message: String,
+    val validationErrors: MutableMap<String, String> = mutableMapOf()
 ) {
 
     fun addValidation(name: String, message: String) {

@@ -157,4 +157,16 @@ class PostControllerTest @Autowired constructor(
             .andExpect(status().isOk())
             .andDo(print())
     }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글 조회")
+    fun test9() {
+        // expected
+        mvc.perform(
+            delete("/posts/{savedPost.id}", 2L)
+                .contentType(APPLICATION_JSON)
+        )
+            .andExpect(status().isOk())
+            .andDo(print())
+    }
 }

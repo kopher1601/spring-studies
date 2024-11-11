@@ -1,11 +1,13 @@
 package jp.co.kopher1601.kopherlog.service
 
 import jp.co.kopher1601.kopherlog.domain.Post
+import jp.co.kopher1601.kopherlog.exception.PostNotFound
 import jp.co.kopher1601.kopherlog.repository.PostRepository
 import jp.co.kopher1601.kopherlog.request.PostCreate
 import jp.co.kopher1601.kopherlog.request.PostEdit
 import jp.co.kopher1601.kopherlog.request.PostSearch
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -103,6 +105,42 @@ class PostServiceTest @Autowired constructor(
         // then
         val count = postRepository.count()
         assertThat(count).isEqualTo(0)
+    }
+
+    @Test
+    @DisplayName("글 한 개 조회 - 존재하지 않는 id")
+    fun test6() {
+        // given
+        postRepository.save(Post("코퍼로그", "키치죠지맨션"))
+
+        // expected
+        assertThatThrownBy { postService.get(2L) }
+            .isInstanceOf(PostNotFound::class.java)
+    }
+
+    @Test
+    @DisplayName("게시글 한 개 삭제 - 존재하지 않는 id")
+    fun test7() {
+        // given
+        postRepository.save(Post("코퍼로그", "키치죠지맨션"))
+
+        // expected
+        assertThatThrownBy { postService.delete(2L) }
+            .isInstanceOf(PostNotFound::class.java)
+    }
+
+    @Test
+    @DisplayName("게시글 수정 - 존재하지 않는 id")
+    fun test8() {
+        // given
+        postRepository.save(Post("코퍼맨션", "키치죠지맨션"))
+        val postEdit = PostEdit(
+            title = "코퍼로그"
+        )
+
+        // expected
+        assertThatThrownBy { postService.edit(2L, postEdit) }
+            .isInstanceOf(PostNotFound::class.java)
     }
 
 }
