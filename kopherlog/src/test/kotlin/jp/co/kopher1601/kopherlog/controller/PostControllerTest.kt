@@ -166,7 +166,27 @@ class PostControllerTest @Autowired constructor(
             delete("/posts/{savedPost.id}", 2L)
                 .contentType(APPLICATION_JSON)
         )
-            .andExpect(status().isOk())
+            .andExpect(status().isNotFound())
+            .andDo(print())
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글 수정")
+    fun test10() {
+        // given
+        val postEdit = PostEdit(
+            title = "무사시사카이라도 좋아요",
+            content = "사고싶다"
+        )
+        val jsonString = objectMapper.writeValueAsString(postEdit)
+
+        // expected
+        mvc.perform(
+            delete("/posts/{savedPost.id}", 1L)
+                .contentType(APPLICATION_JSON)
+                .content(jsonString)
+        )
+            .andExpect(status().isNotFound())
             .andDo(print())
     }
 }
