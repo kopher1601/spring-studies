@@ -11,7 +11,7 @@ package jp.co.kopher1601.kopherlog.response
  */
 data class ErrorResponse(
     val code: String,
-    val message: String,
+    val message: String?,
     val validationErrors: MutableMap<String, String> = mutableMapOf()
 ) {
 

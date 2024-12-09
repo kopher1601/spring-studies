@@ -1,9 +1,10 @@
 package jp.co.kopher1601.kopherlog.controller
 
-import jp.co.kopher1601.kopherlog.exception.PostNotFound
+import jp.co.kopher1601.kopherlog.exception.KopherlogException
 import jp.co.kopher1601.kopherlog.response.ErrorResponse
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -26,12 +27,16 @@ class ExceptionController {
         return response
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(PostNotFound::class)
-    fun postNotFound(e: PostNotFound): ErrorResponse {
-        val response = ErrorResponse(code = "400", message = e.message)
+    @ExceptionHandler(KopherlogException::class)
+    fun postNotFound(e: KopherlogException): ResponseEntity<ErrorResponse> {
+        val statusCode = e.statusCode()
+
+        val response = ErrorResponse(
+            code = statusCode.toString(),
+            message = e.message
+        )
 
         log.info("Error! = {}", response)
-        return response
+        return ResponseEntity.status(statusCode).body(response)
     }
 }
