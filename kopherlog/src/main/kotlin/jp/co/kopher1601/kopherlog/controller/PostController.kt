@@ -1,6 +1,5 @@
 package jp.co.kopher1601.kopherlog.controller
 
-import jp.co.kopher1601.kopherlog.exception.InvalidRequest
 import jp.co.kopher1601.kopherlog.request.PostCreate
 import jp.co.kopher1601.kopherlog.request.PostEdit
 import jp.co.kopher1601.kopherlog.request.PostSearch
@@ -17,9 +16,7 @@ class PostController(
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/posts")
     fun post(@RequestBody @Validated postCreate: PostCreate) {
-        if (postCreate.title.contains("바보")) {
-            throw InvalidRequest()
-        }
+        postCreate.validate()
 
         postService.write(postCreate)
     }

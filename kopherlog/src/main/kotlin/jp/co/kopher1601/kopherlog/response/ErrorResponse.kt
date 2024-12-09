@@ -12,10 +12,10 @@ package jp.co.kopher1601.kopherlog.response
 data class ErrorResponse(
     val code: String,
     val message: String?,
-    val validationErrors: MutableMap<String, String> = mutableMapOf()
+    val validationErrors: MutableMap<String?, String?> = mutableMapOf()
 ) {
 
-    fun addValidation(name: String, message: String) {
+    fun addValidation(name: String?, message: String?) {
         validationErrors[name] = message
     }
 }

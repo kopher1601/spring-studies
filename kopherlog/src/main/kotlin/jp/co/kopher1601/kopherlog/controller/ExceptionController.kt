@@ -33,7 +33,8 @@ class ExceptionController {
 
         val response = ErrorResponse(
             code = statusCode.toString(),
-            message = e.message
+            message = e.message,
+            validationErrors = e.validation
         )
 
         log.info("Error! = {}", response)
