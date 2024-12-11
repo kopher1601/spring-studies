@@ -15,10 +15,11 @@ class PostController(
 ) {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/posts")
-    fun post(@RequestBody @Validated postCreate: PostCreate) {
-        postCreate.validate()
-
-        postService.write(postCreate)
+    fun post(@RequestBody @Validated postCreate: PostCreate, @RequestParam authorization: String) {
+        if (authorization.equals("코퍼")) {
+            postCreate.validate()
+            postService.write(postCreate)
+        }
     }
 
     @GetMapping("/posts/{postId}")

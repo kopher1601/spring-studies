@@ -31,7 +31,7 @@ class PostControllerTest @Autowired constructor(
 ) {
 
     @Test
-    @DisplayName("/posts 요청시 데이터베이스에 값이 저장된다.")
+    @DisplayName("글 작성 요청시 데이터베이스에 값이 저장된다.")
     fun test3() {
         // given
         val jsonString = objectMapper.writeValueAsString(PostCreate(title = "테스트입니다.", content = "테스트 내용입니다."))
