@@ -39,6 +39,7 @@ class PostControllerTest @Autowired constructor(
         // when
         mvc.perform(
             post("/posts")
+                .header("authorization", "코퍼")
                 .contentType(APPLICATION_JSON)
                 .content(jsonString)
         )
