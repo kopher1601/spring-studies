@@ -1,2 +1,0 @@
-include::{snippets}/index/http-request.adoc[]
-
