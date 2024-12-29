@@ -2,25 +2,34 @@ package jp.kopher.customloginpage.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
+import org.springframework.security.crypto.password.NoOpPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
+import org.springframework.security.provisioning.JdbcUserDetailsManager
+import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.access.AccessDeniedHandler
+import javax.sql.DataSource
 
 @Configuration
 class SecurityConfiguration(
-    private val customAccessDeniedHandler: AccessDeniedHandler
+    private val customAccessDeniedHandler: AccessDeniedHandler,
+    private val dataSource: DataSource
 ) {
 
     @Bean
-    fun userDetailsService(): InMemoryUserDetailsManager {
-        val user = User.withUsername("user").password("password").roles("USER").build()
-        return InMemoryUserDetailsManager(user)
+    fun userDetailsService(): UserDetailsManager {
+//        val user = User.withUsername("user").password("password").roles("USER").build()
+//        return InMemoryUserDetailsManager(user)
+        val users = JdbcUserDetailsManager(dataSource)
+//        users.createUser(user)
+        return users
     }
 
     @Bean
@@ -48,7 +57,12 @@ class SecurityConfiguration(
 
     @Bean
     fun passwordEncoder(): PasswordEncoder {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder()
+        return NoOpPasswordEncoder.getInstance()
     }
+
+//    @Bean
+//    fun dataSource(): DataSource {
+//
+//    }
 
 }
