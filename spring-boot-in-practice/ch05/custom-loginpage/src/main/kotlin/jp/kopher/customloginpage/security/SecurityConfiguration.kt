@@ -1,16 +1,13 @@
 package jp.kopher.customloginpage.security
 
+import jp.kopher.customloginpage.repository.ApplicationUserRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
-import org.springframework.security.core.userdetails.User
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.crypto.factory.PasswordEncoderFactories
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.NoOpPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.provisioning.JdbcUserDetailsManager
 import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
@@ -20,16 +17,12 @@ import javax.sql.DataSource
 @Configuration
 class SecurityConfiguration(
     private val customAccessDeniedHandler: AccessDeniedHandler,
-    private val dataSource: DataSource
+    private val applicationUserRepository: ApplicationUserRepository
 ) {
 
     @Bean
-    fun userDetailsService(): UserDetailsManager {
-//        val user = User.withUsername("user").password("password").roles("USER").build()
-//        return InMemoryUserDetailsManager(user)
-        val users = JdbcUserDetailsManager(dataSource)
-//        users.createUser(user)
-        return users
+    fun userDetailsService(): UserDetailsService {
+        return CustomUserDetailsService(applicationUserRepository)
     }
 
     @Bean
@@ -59,10 +52,5 @@ class SecurityConfiguration(
     fun passwordEncoder(): PasswordEncoder {
         return NoOpPasswordEncoder.getInstance()
     }
-
-//    @Bean
-//    fun dataSource(): DataSource {
-//
-//    }
 
 }
