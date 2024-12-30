@@ -14,4 +14,5 @@ class ApplicationUser(
     val username: String? = null,
     val email: String? = null,
     val password: String? = null,
+    var verified: Boolean = false,
 )

@@ -1,5 +1,6 @@
 package jp.co.kopher.coursetracker.security
 
+import jp.co.kopher.coursetracker.handler.CustomAuthenticationFailureHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -12,7 +13,9 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
-class SecurityConfiguration {
+class SecurityConfiguration(
+    val customAuthenticationFailureHandler: CustomAuthenticationFailureHandler
+) {
 
     @Bean
     fun userDetailsService(): UserDetailsService {
@@ -51,7 +54,7 @@ class SecurityConfiguration {
                 .anyRequest().authenticated()
         }
         http.formLogin { form ->
-            form.loginPage("/login").failureUrl("/login-error")
+            form.loginPage("/login").failureUrl("/login-error").failureHandler(customAuthenticationFailureHandler)
         }
         return http.build()
     }

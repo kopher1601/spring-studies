@@ -20,6 +20,8 @@ repositories {
 }
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-mail:3.4.1")
+
     implementation("org.webjars:bootstrap:4.4.1")
     implementation("org.webjars:jquery:3.4.1")
     implementation("org.webjars:webjars-locator:0.38")

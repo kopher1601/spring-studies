@@ -5,5 +5,6 @@ import jp.co.kopher.coursetracker.model.ApplicationUser
 
 interface UserService {
     fun createUser(userDto: UserDto): ApplicationUser
+    fun save(applicationUser: ApplicationUser?): ApplicationUser
     fun findByUsername(username: String?): ApplicationUser?
 }
