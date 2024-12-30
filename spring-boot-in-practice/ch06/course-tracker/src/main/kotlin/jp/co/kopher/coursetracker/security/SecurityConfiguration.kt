@@ -49,8 +49,9 @@ class SecurityConfiguration(
         }
         http.authorizeHttpRequests { authz ->
             authz.requestMatchers("/login").permitAll()
-                .requestMatchers("/adduser").permitAll()
+                .requestMatchers("/addUser").permitAll()
                 .requestMatchers("/login-error").permitAll()
+                .requestMatchers("/login-locked").permitAll()
                 .anyRequest().authenticated()
         }
         http.formLogin { form ->

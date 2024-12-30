@@ -16,11 +16,11 @@ create table CT_USERS
     email      varchar(50),
     username   varchar(50),
     password   varchar(100),
-    verified   smallint(1),
+    verified   smallint,
     PRIMARY KEY (id)
 );
 
-CREATE TABLE CT_EMAIL_VERIFICATIONS
+create table CT_EMAIL_VERIFICATIONS
 (
     verification_id varchar(50),
     username        varchar(50),

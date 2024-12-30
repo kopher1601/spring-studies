@@ -18,4 +18,10 @@ class LoginController {
         model.addAttribute("loginError", true)
         return "login"
     }
+
+    @GetMapping("/login-locked")
+    fun loginLocked(model: Model): String {
+        model.addAttribute("loginLocked", true)
+        return "login"
+    }
 }

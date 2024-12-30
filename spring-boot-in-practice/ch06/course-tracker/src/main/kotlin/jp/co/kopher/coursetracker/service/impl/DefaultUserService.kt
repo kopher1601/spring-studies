@@ -23,7 +23,12 @@ class DefaultUserService(
         return userRepository.save(applicationUser)
     }
 
-    override fun findByUsername(username: String): ApplicationUser? {
+    override fun save(applicationUser: ApplicationUser?): ApplicationUser {
+        return userRepository.save(applicationUser!!)
+    }
+
+    override fun findByUsername(username: String?): ApplicationUser? {
         return userRepository.findByUsername(username)
+
     }
 }

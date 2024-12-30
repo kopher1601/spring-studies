@@ -26,6 +26,8 @@ dependencies {
     implementation("org.webjars:jquery:3.4.1")
     implementation("org.webjars:webjars-locator:0.38")
 
+    implementation("com.google.guava:guava:33.4.0-jre")
+
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-validation")
