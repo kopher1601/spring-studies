@@ -46,10 +46,12 @@ class SecurityConfiguration {
         }
         http.authorizeHttpRequests { authz ->
             authz.requestMatchers("/login").permitAll()
+                .requestMatchers("/adduser").permitAll()
+                .requestMatchers("/login-error").permitAll()
                 .anyRequest().authenticated()
         }
         http.formLogin { form ->
-            form.loginPage("/login")
+            form.loginPage("/login").failureUrl("/login-error")
         }
         return http.build()
     }
