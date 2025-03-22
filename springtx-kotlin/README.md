@@ -1,1 +1,0 @@
-# Spring Transaction の基本的な勉強(with Kotlin)
