@@ -1,15 +1,13 @@
 package com.group.libraryapp.domain.book
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
 class Book(
     val name: String,
 
-    val type: String,
+    @Enumerated(EnumType.STRING)
+    val type: BookType,
 
     // default 値が入るパラメーターは一番したにあるのが慣例
     @Id
@@ -27,7 +25,7 @@ class Book(
     companion object {
         fun fixture(
             name: String = "book name",
-            type: String = "book type",
+            type: BookType = BookType.COMPUTER,
             id: Long? = null,
         ): Book {
             return Book(
