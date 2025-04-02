@@ -1,4 +1,4 @@
-package jp.co.kopher.kotlinhexagonal
+package jp.co.kopher.kotlinhexagonal.bukpal
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
