@@ -10,7 +10,13 @@ fun main(args: Array<String>) {
 
     em.transaction.begin()
     try {
-        val members = em.createQuery("select m from Member m", Member::class.java).resultList
+        // 비영속
+        val member = Member("HelloJPA", 100L)
+
+        // 영속
+        println("==== BEFORE ====")
+        em.persist(member)
+        println("==== AFTER ====")
 
         em.transaction.commit()
     } catch (e: Exception) {
