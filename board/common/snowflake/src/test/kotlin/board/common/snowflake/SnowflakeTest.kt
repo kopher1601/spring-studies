@@ -1,4 +1,4 @@
-package kuke.board.common.snowflake
+package board.common.snowflake
 
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test

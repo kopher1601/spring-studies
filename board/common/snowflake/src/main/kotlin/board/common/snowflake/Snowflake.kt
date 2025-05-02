@@ -1,4 +1,4 @@
-package kuke.board.common.snowflake
+package board.common.snowflake
 
 class Snowflake {
     private val nodeId: Long = java.util.random.RandomGenerator.getDefault().nextLong(maxNodeId + 1)
