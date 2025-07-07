@@ -1,8 +1,14 @@
 package jp.kopher1601.splearn.domain;
 
 import lombok.Getter;
+import lombok.ToString;
+
+import static org.springframework.util.Assert.state;
+
+import java.util.Objects;
 
 @Getter
+@ToString
 public class Member {
     private String email;
     private String nickname;
@@ -10,9 +16,21 @@ public class Member {
     private MemberStatus status;
     
     public Member(String email, String nickname, String passwordHash) {
-        this.email = email;
-        this.nickname = nickname;
-        this.passwordHash = passwordHash;
+        this.email = Objects.requireNonNull(email);
+        this.nickname = Objects.requireNonNull(nickname);
+        this.passwordHash = Objects.requireNonNull(passwordHash);
         this.status = MemberStatus.PENDING;
+    }
+
+    public void activate() {
+        state(this.status == MemberStatus.PENDING, "Member is not pending");
+
+        this.status = MemberStatus.ACTIVE;
+    }
+
+    public void deactivate() {
+        state(this.status == MemberStatus.ACTIVE, "Member is not active");
+
+        this.status = MemberStatus.DEACTIVATED;
     }
 }
