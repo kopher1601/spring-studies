@@ -23,7 +23,7 @@ class MemberTest {
             }
         };
 
-        member = Member.create(new MembmerCreateRequest("test@example.com", "test", "password"), passwordEncoder);
+        member = Member.create(new MemberCreateRequest("test@example.com", "test", "password"), passwordEncoder);
     }
     
     @Test
@@ -106,5 +106,12 @@ class MemberTest {
         member.deactivate();
 
         assertThat(member.isActive()).isFalse();
+    }
+
+    @Test
+    void invalidEmail() {
+        assertThatThrownBy(() -> Member.create(new MemberCreateRequest("invalid", "test", "password"), passwordEncoder))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Invalid email address: invalid");
     }
 }

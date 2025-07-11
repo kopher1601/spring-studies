@@ -3,13 +3,15 @@ package jp.kopher1601.splearn.domain;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.regex.Pattern;
+
 import static java.util.Objects.requireNonNull;
 import static org.springframework.util.Assert.state;
 
 @Getter
 @ToString
 public class Member {
-    private String email;
+    private Email email;
     private String nickname;
     private String passwordHash;
     private MemberStatus status;
@@ -17,10 +19,10 @@ public class Member {
     private Member() {
     }
 
-    public static Member create(MembmerCreateRequest createRequest, PasswordEncoder passwordEncoder) {
+    public static Member create(MemberCreateRequest createRequest, PasswordEncoder passwordEncoder) {
         var member = new Member();
 
-        member.email = requireNonNull(createRequest.email());
+        member.email = new Email(createRequest.email());
         member.nickname = requireNonNull(createRequest.nickname());
         member.passwordHash = requireNonNull(passwordEncoder.encode(createRequest.password()));
         member.status = MemberStatus.PENDING;
