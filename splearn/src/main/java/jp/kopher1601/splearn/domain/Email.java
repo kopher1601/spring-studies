@@ -1,7 +1,13 @@
 package jp.kopher1601.splearn.domain;
 
+import jakarta.persistence.Embeddable;
+
 import java.util.regex.Pattern;
 
+/**
+ * JPA 3.2.0 부터 @Embeddable 을 record 에서 사용할 수 있다
+ */
+@Embeddable
 public record Email(String address) {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
 

@@ -2,6 +2,9 @@ package jp.kopher1601.splearn.domain;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static jp.kopher1601.splearn.domain.MemberFixture.createMemberRegisterRequest;
+import static jp.kopher1601.splearn.domain.MemberFixture.createPasswordEncoder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -11,24 +14,14 @@ class MemberTest {
 
     @BeforeEach
     void setUp() {
-        this.passwordEncoder = new PasswordEncoder() {
-            @Override
-            public String encode(String password) {
-                return password.toUpperCase();
-            }
+        this.passwordEncoder = createPasswordEncoder();
 
-            @Override
-            public boolean matches(String password, String passwordHash) {
-                return encode(password).equals(passwordHash);
-            }
-        };
-
-        member = Member.create(new MemberCreateRequest("test@example.com", "test", "password"), passwordEncoder);
+        member = Member.register(createMemberRegisterRequest(), passwordEncoder);
     }
-    
+
     @Test
-    void createMember() {
-        assertThat(member.getEmail()).isEqualTo("test@example.com");
+    void registerMember() {
+        assertThat(member.getEmail().address()).isEqualTo("test@example.com");
         assertThat(member.getNickname()).isEqualTo("test");
         assertThat(member.getPasswordHash()).isEqualTo("PASSWORD");
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
@@ -110,7 +103,7 @@ class MemberTest {
 
     @Test
     void invalidEmail() {
-        assertThatThrownBy(() -> Member.create(new MemberCreateRequest("invalid", "test", "password"), passwordEncoder))
+        assertThatThrownBy(() -> Member.register(createMemberRegisterRequest("invalid"), passwordEncoder))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("Invalid email address: invalid");
     }

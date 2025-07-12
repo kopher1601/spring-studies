@@ -1,25 +1,38 @@
 package jp.kopher1601.splearn.domain;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import java.util.regex.Pattern;
 
 import static java.util.Objects.requireNonNull;
 import static org.springframework.util.Assert.state;
 
+@Entity
 @Getter
 @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
-    private Email email;
-    private String nickname;
-    private String passwordHash;
-    private MemberStatus status;
-    
-    private Member() {
-    }
 
-    public static Member create(MemberCreateRequest createRequest, PasswordEncoder passwordEncoder) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Embedded
+    private Email email;
+
+    private String nickname;
+
+    private String passwordHash;
+
+    /**
+     * Database 가 Enum 타입을 지원한다면 Enum 타입으로 아니면 varchar 타입으로 설정해준다.
+     */
+    @Enumerated(EnumType.STRING)
+    private MemberStatus status;
+
+    public static Member register(MemberRegisterRequest createRequest, PasswordEncoder passwordEncoder) {
         var member = new Member();
 
         member.email = new Email(createRequest.email());
