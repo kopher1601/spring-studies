@@ -3,9 +3,7 @@ package jp.kopher1601.splearn.application;
 import jp.kopher1601.splearn.application.provided.MemberRegister;
 import jp.kopher1601.splearn.application.required.EmailSender;
 import jp.kopher1601.splearn.application.required.MemberRepository;
-import jp.kopher1601.splearn.domain.Member;
-import jp.kopher1601.splearn.domain.MemberRegisterRequest;
-import jp.kopher1601.splearn.domain.PasswordEncoder;
+import jp.kopher1601.splearn.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,18 +17,25 @@ public class MemberService implements MemberRegister {
 
     @Override
     public Member register(MemberRegisterRequest registerRequest) {
-        // check
+        checkDuplicateEmail(registerRequest);
 
-        // domain model
         Member member = Member.register(registerRequest, passwordEncoder);
 
-        // repository
         memberRepository.save(member);
 
-        // post process
-        emailSender.send(member.getEmail(), "登録を完了してください", "下のリンクをクリックして登録を完了してください");
+        sendWelcomeEmail(member);
 
         return member;
+    }
+
+    private void sendWelcomeEmail(Member member) {
+        emailSender.send(member.getEmail(), "登録を完了してください", "下のリンクをクリックして登録を完了してください");
+    }
+
+    private void checkDuplicateEmail(MemberRegisterRequest registerRequest) {
+        if (memberRepository.findByEmail(new Email(registerRequest.email())).isPresent()) {
+            throw new DuplicateEmailException("email is already registered");
+        }
     }
 
 }
