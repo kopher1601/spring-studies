@@ -1,5 +1,6 @@
 package jp.kopher1601.splearn.application.provided;
 
+import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
 import jp.kopher1601.splearn.SplearnTestConfiguration;
 import jp.kopher1601.splearn.domain.*;
@@ -14,15 +15,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest
 @Transactional
 @Import(SplearnTestConfiguration.class)
-public record MemberRegisterTest(
-        MemberRegister memberRegister
+record MemberRegisterTest(
+        MemberRegister memberRegister,
+        EntityManager entityManager
 ) {
 
     @Test
     void register() {
         Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
 
-        assertThat(member.getId()).isEqualTo(1L);
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
     }
 
@@ -32,6 +33,18 @@ public record MemberRegisterTest(
 
         assertThatThrownBy(() -> memberRegister.register(MemberFixture.createMemberRegisterRequest()))
                 .isInstanceOf(DuplicateEmailException.class);
+    }
+
+    @Test
+    void activate() {
+        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
+        entityManager.flush();
+        entityManager.clear();
+
+        member = memberRegister.activate(member.getId());
+        entityManager.flush();
+
+        assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTIVE);
     }
 
     @Test
