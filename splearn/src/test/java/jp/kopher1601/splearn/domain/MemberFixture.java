@@ -2,7 +2,7 @@ package jp.kopher1601.splearn.domain;
 
 public class MemberFixture {
     public static MemberRegisterRequest createMemberRegisterRequest(String email) {
-        return new MemberRegisterRequest(email, "test", "password");
+        return new MemberRegisterRequest(email, "test_member", "passwordpassword");
     }
 
     public static MemberRegisterRequest createMemberRegisterRequest() {

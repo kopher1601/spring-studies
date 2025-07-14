@@ -22,8 +22,8 @@ class MemberTest {
     @Test
     void registerMember() {
         assertThat(member.getEmail().address()).isEqualTo("test@example.com");
-        assertThat(member.getNickname()).isEqualTo("test");
-        assertThat(member.getPasswordHash()).isEqualTo("PASSWORD");
+        assertThat(member.getNickname()).isEqualTo("test_member");
+        assertThat(member.getPasswordHash()).isEqualTo("PASSWORDPASSWORD");
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
     }
 
@@ -68,13 +68,13 @@ class MemberTest {
 
     @Test
     void verifyPassword() {
-        assertThat(member.verifyPassword("password", passwordEncoder)).isTrue();
+        assertThat(member.verifyPassword("passwordpassword", passwordEncoder)).isTrue();
         assertThat(member.verifyPassword("Hello", passwordEncoder)).isFalse();
     }
 
     @Test
     void changeNickname() {
-        assertThat(member.getNickname()).isEqualTo("test");
+        assertThat(member.getNickname()).isEqualTo("test_member");
 
         member.changeNickname("Kopher1601");
 

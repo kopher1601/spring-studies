@@ -1,10 +1,8 @@
 package jp.kopher1601.splearn.application.provided;
 
+import jakarta.validation.ConstraintViolationException;
 import jp.kopher1601.splearn.SplearnTestConfiguration;
-import jp.kopher1601.splearn.domain.DuplicateEmailException;
-import jp.kopher1601.splearn.domain.Member;
-import jp.kopher1601.splearn.domain.MemberFixture;
-import jp.kopher1601.splearn.domain.MemberStatus;
+import jp.kopher1601.splearn.domain.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -36,4 +34,14 @@ public record MemberRegisterTest(
                 .isInstanceOf(DuplicateEmailException.class);
     }
 
+    @Test
+    void memberRegisterRequestFail() {
+        extracted(new MemberRegisterRequest("kopher@splearn.app", "Koph", "longsecret"));
+        extracted(new MemberRegisterRequest("kopher@splearn.app", "Kopher___________________________________________", "longsecret"));
+    }
+
+    private void extracted(MemberRegisterRequest invalid) {
+        assertThatThrownBy(() -> memberRegister.register(invalid))
+                .isInstanceOf(ConstraintViolationException.class);
+    }
 }

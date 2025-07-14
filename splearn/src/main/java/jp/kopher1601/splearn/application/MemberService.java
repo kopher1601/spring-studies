@@ -6,8 +6,12 @@ import jp.kopher1601.splearn.application.required.MemberRepository;
 import jp.kopher1601.splearn.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 @Service
+@Transactional
+@Validated
 @RequiredArgsConstructor
 public class MemberService implements MemberRegister {
 
@@ -15,6 +19,7 @@ public class MemberService implements MemberRegister {
     private final EmailSender emailSender;
     private final PasswordEncoder passwordEncoder;
 
+    // @Valid MemberRegisterRequest registerRequest 해도 되지만 interface에 붙여놓은 경우 생략해도 된다.
     @Override
     public Member register(MemberRegisterRequest registerRequest) {
         checkDuplicateEmail(registerRequest);
