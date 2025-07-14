@@ -29,7 +29,7 @@ record MemberRegisterTest(
 
     @Test
     void duplicateEmailFail() {
-        Member member1 = memberRegister.register(MemberFixture.createMemberRegisterRequest());
+        memberRegister.register(MemberFixture.createMemberRegisterRequest());
 
         assertThatThrownBy(() -> memberRegister.register(MemberFixture.createMemberRegisterRequest()))
                 .isInstanceOf(DuplicateEmailException.class);
@@ -49,11 +49,12 @@ record MemberRegisterTest(
 
     @Test
     void memberRegisterRequestFail() {
-        extracted(new MemberRegisterRequest("kopher@splearn.app", "Koph", "longsecret"));
-        extracted(new MemberRegisterRequest("kopher@splearn.app", "Kopher___________________________________________", "longsecret"));
+        checkValidation(new MemberRegisterRequest("kopher@splearn.app", "Koph", "longsecret"));
+        checkValidation(new MemberRegisterRequest("kopher@splearn.app", "Kopher___________________________________________", "longsecret"));
+        checkValidation(new MemberRegisterRequest("kophersplearn.app", "Kopher___________________________________________", "longsecret"));
     }
 
-    private void extracted(MemberRegisterRequest invalid) {
+    private void checkValidation(MemberRegisterRequest invalid) {
         assertThatThrownBy(() -> memberRegister.register(invalid))
                 .isInstanceOf(ConstraintViolationException.class);
     }

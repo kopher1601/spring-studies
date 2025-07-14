@@ -3,7 +3,6 @@ package jp.kopher1601.splearn.application.required;
 import jakarta.persistence.EntityManager;
 import jp.kopher1601.splearn.domain.Member;
 import lombok.RequiredArgsConstructor;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,7 +10,7 @@ import org.springframework.test.context.TestConstructor;
 
 import static jp.kopher1601.splearn.domain.MemberFixture.createMemberRegisterRequest;
 import static jp.kopher1601.splearn.domain.MemberFixture.createPasswordEncoder;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
