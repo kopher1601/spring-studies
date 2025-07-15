@@ -1,12 +1,11 @@
 package jp.kopher1601.splearn.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.NaturalIdCache;
 
 import static java.util.Objects.requireNonNull;
 import static org.springframework.util.Assert.state;
@@ -15,14 +14,8 @@ import static org.springframework.util.Assert.state;
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@NaturalIdCache
-public class Member {
+public class Member extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Embedded
     @NaturalId
     private Email email;
 
@@ -33,7 +26,6 @@ public class Member {
     /**
      * Database 가 Enum 타입을 지원한다면 Enum 타입으로 아니면 varchar 타입으로 설정해준다.
      */
-    @Enumerated(EnumType.STRING)
     private MemberStatus status;
 
     public static Member register(MemberRegisterRequest createRequest, PasswordEncoder passwordEncoder) {
