@@ -1,9 +1,9 @@
-package jp.kopher1601.splearn.application.provided;
+package jp.kopher1601.splearn.application.member.provided;
 
 import jakarta.persistence.EntityManager;
 import jp.kopher1601.splearn.SplearnTestConfiguration;
-import jp.kopher1601.splearn.domain.Member;
-import jp.kopher1601.splearn.domain.MemberFixture;
+import jp.kopher1601.splearn.domain.member.Member;
+import jp.kopher1601.splearn.domain.member.MemberFixture;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;

@@ -67,3 +67,7 @@ tasks.test {
         events("passed", "skipped", "failed")
     }
 }
+
+spotbugs {
+    excludeFilter.set(file("${projectDir}/spotbugs-exclude-filter.xml"))
+}

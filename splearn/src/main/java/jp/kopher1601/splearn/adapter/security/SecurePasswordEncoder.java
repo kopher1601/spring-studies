@@ -1,6 +1,6 @@
 package jp.kopher1601.splearn.adapter.security;
 
-import jp.kopher1601.splearn.domain.PasswordEncoder;
+import jp.kopher1601.splearn.domain.member.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 

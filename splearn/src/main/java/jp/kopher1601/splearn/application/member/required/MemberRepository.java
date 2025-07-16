@@ -1,7 +1,7 @@
-package jp.kopher1601.splearn.application.required;
+package jp.kopher1601.splearn.application.member.required;
 
-import jp.kopher1601.splearn.domain.Email;
-import jp.kopher1601.splearn.domain.Member;
+import jp.kopher1601.splearn.domain.member.Member;
+import jp.kopher1601.splearn.domain.shared.Email;
 import org.springframework.data.repository.Repository;
 
 import java.util.Optional;

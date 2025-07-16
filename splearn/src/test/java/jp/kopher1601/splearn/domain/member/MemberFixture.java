@@ -1,4 +1,4 @@
-package jp.kopher1601.splearn.domain;
+package jp.kopher1601.splearn.domain.member;
 
 public class MemberFixture {
     public static MemberRegisterRequest createMemberRegisterRequest(String email) {

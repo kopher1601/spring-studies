@@ -1,8 +1,8 @@
 package jp.kopher1601.splearn;
 
-import jp.kopher1601.splearn.application.required.EmailSender;
-import jp.kopher1601.splearn.domain.MemberFixture;
-import jp.kopher1601.splearn.domain.PasswordEncoder;
+import jp.kopher1601.splearn.application.member.required.EmailSender;
+import jp.kopher1601.splearn.domain.member.MemberFixture;
+import jp.kopher1601.splearn.domain.member.PasswordEncoder;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 

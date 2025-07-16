@@ -1,15 +1,16 @@
-package jp.kopher1601.splearn.application.required;
+package jp.kopher1601.splearn.application.member.required;
 
 import jakarta.persistence.EntityManager;
-import jp.kopher1601.splearn.domain.Member;
+import jp.kopher1601.splearn.domain.member.Member;
+import jp.kopher1601.splearn.domain.member.MemberStatus;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.TestConstructor;
 
-import static jp.kopher1601.splearn.domain.MemberFixture.createMemberRegisterRequest;
-import static jp.kopher1601.splearn.domain.MemberFixture.createPasswordEncoder;
+import static jp.kopher1601.splearn.domain.member.MemberFixture.createMemberRegisterRequest;
+import static jp.kopher1601.splearn.domain.member.MemberFixture.createPasswordEncoder;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -32,6 +33,11 @@ class MemberRepositoryTest {
         assertThat(member.getId()).isNotNull();
 
         entityManager.flush();
+        entityManager.clear();
+
+        Member found = memberRepository.findById(member.getId()).orElseThrow();
+        assertThat(found.getStatus()).isEqualTo(MemberStatus.PENDING);
+        assertThat(found.getDetail().getRegisteredAt()).isNotNull();
     }
 
     @Test

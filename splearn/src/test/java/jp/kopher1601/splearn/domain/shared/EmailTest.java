@@ -1,4 +1,4 @@
-package jp.kopher1601.splearn.domain;
+package jp.kopher1601.splearn.domain.shared;
 
 import org.junit.jupiter.api.Test;
 

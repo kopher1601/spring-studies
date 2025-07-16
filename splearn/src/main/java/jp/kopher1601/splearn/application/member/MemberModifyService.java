@@ -1,10 +1,14 @@
-package jp.kopher1601.splearn.application;
+package jp.kopher1601.splearn.application.member;
 
-import jp.kopher1601.splearn.application.provided.MemberFinder;
-import jp.kopher1601.splearn.application.provided.MemberRegister;
-import jp.kopher1601.splearn.application.required.EmailSender;
-import jp.kopher1601.splearn.application.required.MemberRepository;
-import jp.kopher1601.splearn.domain.*;
+import jp.kopher1601.splearn.application.member.provided.MemberFinder;
+import jp.kopher1601.splearn.application.member.provided.MemberRegister;
+import jp.kopher1601.splearn.application.member.required.EmailSender;
+import jp.kopher1601.splearn.application.member.required.MemberRepository;
+import jp.kopher1601.splearn.domain.member.DuplicateEmailException;
+import jp.kopher1601.splearn.domain.member.Member;
+import jp.kopher1601.splearn.domain.member.MemberRegisterRequest;
+import jp.kopher1601.splearn.domain.member.PasswordEncoder;
+import jp.kopher1601.splearn.domain.shared.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

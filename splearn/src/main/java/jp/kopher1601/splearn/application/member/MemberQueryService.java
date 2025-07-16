@@ -1,8 +1,8 @@
-package jp.kopher1601.splearn.application;
+package jp.kopher1601.splearn.application.member;
 
-import jp.kopher1601.splearn.application.provided.MemberFinder;
-import jp.kopher1601.splearn.application.required.MemberRepository;
-import jp.kopher1601.splearn.domain.Member;
+import jp.kopher1601.splearn.application.member.provided.MemberFinder;
+import jp.kopher1601.splearn.application.member.required.MemberRepository;
+import jp.kopher1601.splearn.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

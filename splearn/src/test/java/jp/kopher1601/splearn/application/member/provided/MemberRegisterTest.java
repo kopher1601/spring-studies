@@ -1,9 +1,9 @@
-package jp.kopher1601.splearn.application.provided;
+package jp.kopher1601.splearn.application.member.provided;
 
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
 import jp.kopher1601.splearn.SplearnTestConfiguration;
-import jp.kopher1601.splearn.domain.*;
+import jp.kopher1601.splearn.domain.member.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -23,6 +23,8 @@ record MemberRegisterTest(
     @Test
     void register() {
         Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
+
+        System.out.println("member = " + member);
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
     }

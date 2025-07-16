@@ -1,7 +1,7 @@
 package jp.kopher1601.splearn.adapter.integration;
 
-import jp.kopher1601.splearn.application.required.EmailSender;
-import jp.kopher1601.splearn.domain.Email;
+import jp.kopher1601.splearn.application.member.required.EmailSender;
+import jp.kopher1601.splearn.domain.shared.Email;
 import org.springframework.context.annotation.Fallback;
 import org.springframework.stereotype.Component;
 

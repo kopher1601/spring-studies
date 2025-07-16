@@ -1,4 +1,4 @@
-package jp.kopher1601.splearn.domain;
+package jp.kopher1601.splearn.domain.member;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
