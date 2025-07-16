@@ -1,9 +1,6 @@
 package jp.kopher1601.splearn.domain.member;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToOne;
 import jp.kopher1601.splearn.domain.AbstractEntity;
 import jp.kopher1601.splearn.domain.shared.Email;
 import lombok.AccessLevel;
@@ -35,7 +32,6 @@ public class Member extends AbstractEntity {
      */
     private MemberStatus status;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private MemberDetail detail;
 
     public static Member register(MemberRegisterRequest createRequest, PasswordEncoder passwordEncoder) {

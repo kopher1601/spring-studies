@@ -39,9 +39,7 @@ record MemberRegisterTest(
 
     @Test
     void activate() {
-        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
-        entityManager.flush();
-        entityManager.clear();
+        Member member = registerMember();
 
         member = memberRegister.activate(member.getId());
         entityManager.flush();
@@ -54,6 +52,41 @@ record MemberRegisterTest(
         checkValidation(new MemberRegisterRequest("kopher@splearn.app", "Koph", "longsecret"));
         checkValidation(new MemberRegisterRequest("kopher@splearn.app", "Kopher___________________________________________", "longsecret"));
         checkValidation(new MemberRegisterRequest("kophersplearn.app", "Kopher___________________________________________", "longsecret"));
+    }
+
+    @Test
+    void deactivate() {
+        Member member = registerMember();
+
+        member = memberRegister.activate(member.getId());
+        entityManager.flush();
+        entityManager.clear();
+
+        member = memberRegister.deactivate(member.getId());
+
+        assertThat(member.getStatus()).isEqualTo(MemberStatus.DEACTIVATED);
+        assertThat(member.getDetail().getDeactivatedAt()).isNotNull();
+    }
+
+    @Test
+    void updateInfo() {
+        Member member = registerMember();
+
+        member = memberRegister.activate(member.getId());
+        entityManager.flush();
+        entityManager.clear();
+
+        member = memberRegister.updateInfo(member.getId(), new MemberInfoUpdateRequest("Kopher", "kopher1601", "자기소개"));
+
+        assertThat(member.getDetail().getProfile().address()).isEqualTo("kopher1601");
+    }
+
+    private Member registerMember() {
+        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
+        entityManager.flush();
+        entityManager.clear();
+
+        return member;
     }
 
     private void checkValidation(MemberRegisterRequest invalid) {

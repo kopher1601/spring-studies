@@ -1,6 +1,5 @@
 package jp.kopher1601.splearn.domain.member;
 
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jp.kopher1601.splearn.domain.AbstractEntity;
 import lombok.AccessLevel;
@@ -19,7 +18,6 @@ import static java.util.Objects.requireNonNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberDetail extends AbstractEntity {
 
-    @Embedded
     private Profile profile;
 
     private String introduction;
