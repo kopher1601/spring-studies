@@ -129,7 +129,6 @@ class MemberTest {
         assertThatThrownBy(() -> {
             var request = new MemberInfoUpdateRequest("Leo", "kopher1601", "자기소개");
             member.updateInfo(request);
-        })
-                .isInstanceOf(IllegalStateException.class);
+        }).isInstanceOf(IllegalStateException.class);
     }
 }

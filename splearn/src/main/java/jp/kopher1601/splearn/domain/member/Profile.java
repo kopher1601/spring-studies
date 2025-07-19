@@ -7,7 +7,7 @@ public record Profile(String address) {
 
     // 생성자처럼 작동함
     public Profile {
-        if (!PROFILE_ADDRESS_PATTERN.matcher(address).matches()) {
+        if (address == null || (!address.isEmpty() && !PROFILE_ADDRESS_PATTERN.matcher(address).matches())) {
             throw new IllegalArgumentException("Invalid profile address: " + address);
         }
 

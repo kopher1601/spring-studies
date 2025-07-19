@@ -81,8 +81,30 @@ record MemberRegisterTest(
         assertThat(member.getDetail().getProfile().address()).isEqualTo("kopher1601");
     }
 
+    @Test
+    void updateInfoFail() {
+        Member member = registerMember();
+        member = memberRegister.activate(member.getId());
+        member = memberRegister.updateInfo(member.getId(), new MemberInfoUpdateRequest("Kopher", "kopher1601", "자기소개"));
+
+        Member member2 = registerMember("kopher2@splearn.app");
+        entityManager.flush();
+        entityManager.clear();
+
+        assertThatThrownBy(() -> memberRegister.updateInfo(member2.getId(), new MemberInfoUpdateRequest("James", "kopher1601", "Introduction")))
+                .isInstanceOf(DuplicateProfileException.class);
+    }
+
     private Member registerMember() {
         Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
+        entityManager.flush();
+        entityManager.clear();
+
+        return member;
+    }
+
+    private Member registerMember(String email) {
+        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest(email));
         entityManager.flush();
         entityManager.clear();
 
