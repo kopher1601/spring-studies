@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestConstructor;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,12 +30,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @AutoConfigureMockMvc
 @Transactional
 @RequiredArgsConstructor
-public class MemberApiTest {
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
+class MemberApiTest {
 
-    final MockMvcTester mvcTester;
-    final ObjectMapper objectMapper;
-    final MemberRepository memberRepository;
-    final MemberRegister memberRegister;
+    private final MockMvcTester mvcTester;
+    private final ObjectMapper objectMapper;
+    private final MemberRepository memberRepository;
+    private final MemberRegister memberRegister;
 
     @Test
     void register() throws JsonProcessingException, UnsupportedEncodingException {

@@ -85,7 +85,7 @@ record MemberRegisterTest(
     void updateInfoFail() {
         Member member = registerMember();
         member = memberRegister.activate(member.getId());
-        member = memberRegister.updateInfo(member.getId(), new MemberInfoUpdateRequest("Kopher", "kopher1601", "자기소개"));
+        memberRegister.updateInfo(member.getId(), new MemberInfoUpdateRequest("Kopher", "kopher1601", "자기소개"));
 
         Member member2 = registerMember("kopher2@splearn.app");
         entityManager.flush();
