@@ -3,6 +3,7 @@ package kopher.board.article.controller;
 import kopher.board.article.service.ArticleService;
 import kopher.board.article.service.request.ArticleCreateRequest;
 import kopher.board.article.service.request.ArticleUpdateRequest;
+import kopher.board.article.service.response.ArticlePageResponse;
 import kopher.board.article.service.response.ArticleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,11 @@ public class ArticleController {
     @GetMapping("/v1/articles/{articleId}")
     public ArticleResponse read(@PathVariable Long articleId) {
         return articleService.read(articleId);
+    }
+
+    @GetMapping("/v1/articles")
+    public ArticlePageResponse readAll(@RequestParam Long boardId, @RequestParam Long page, @RequestParam Long pageSize) {
+        return articleService.readAll(boardId, page, pageSize);
     }
 
     @PostMapping("/v1/articles")

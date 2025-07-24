@@ -4,6 +4,7 @@ import kopher.board.article.entity.Article;
 import kopher.board.article.repository.ArticleRepository;
 import kopher.board.article.service.request.ArticleCreateRequest;
 import kopher.board.article.service.request.ArticleUpdateRequest;
+import kopher.board.article.service.response.ArticlePageResponse;
 import kopher.board.article.service.response.ArticleResponse;
 import kuke.board.common.snowflake.Snowflake;
 import lombok.RequiredArgsConstructor;
@@ -39,5 +40,16 @@ public class ArticleService {
     @Transactional
     public void delete(Long articleId) {
         articleRepository.deleteById(articleId);
+    }
+
+    public ArticlePageResponse readAll(Long boardId, Long page, Long pageSize) {
+        return ArticlePageResponse.of(
+                articleRepository.findAll(boardId, (page - 1) * pageSize, pageSize).stream()
+                        .map(ArticleResponse::from)
+                        .toList(),
+                articleRepository.count(
+                        boardId,
+                        PageLimitCalculator.calculatePageLimit(page, pageSize, 10L)
+                ));
     }
 }
