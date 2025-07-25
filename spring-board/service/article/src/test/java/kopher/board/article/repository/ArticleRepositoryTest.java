@@ -28,4 +28,13 @@ class ArticleRepositoryTest {
         log.info("count = {}", count);
     }
 
+    @Test
+    void findAllInfiniteScrollTest() {
+        List<Article> articles = articleRepository.findAllInfiniteScroll(1L, 30L);
+        articles.forEach(article -> log.info("article = {}", article));
+
+        List<Article> lastArticles = articleRepository.findAllInfiniteScroll(1L, 30L, articles.getLast().getArticleId());
+        log.info("lastArticles = {}", lastArticles.size());
+        lastArticles.forEach(article -> log.info("lastArticle = {}", article));
+    }
 }
