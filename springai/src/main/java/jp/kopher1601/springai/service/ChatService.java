@@ -20,4 +20,14 @@ public class ChatService {
                 .call()
                 .content(); // 요청 정보를 받는 부분
     }
+
+    public String chatmessage(String message) {
+        return chatClient.prompt()
+                .user(message)
+                .call()
+                .chatResponse() // 누턴의 운동 제2법칙을 간단하게 설명하세요
+                .getResult()
+                .getOutput()
+                .getText();
+    }
 }
