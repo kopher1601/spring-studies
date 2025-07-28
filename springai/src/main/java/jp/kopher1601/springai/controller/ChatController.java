@@ -1,6 +1,7 @@
 package jp.kopher1601.springai.controller;
 
 import jp.kopher1601.springai.service.ChatService;
+import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,5 +33,11 @@ public class ChatController {
             @RequestParam String tone,
             @RequestParam String message) {
         return chatService.chatplace(subject, tone, message);
+    }
+
+    @GetMapping("/chatjson")
+    public ChatResponse chatjson(
+            @RequestParam String message) {
+        return chatService.chatjson(message);
     }
 }
