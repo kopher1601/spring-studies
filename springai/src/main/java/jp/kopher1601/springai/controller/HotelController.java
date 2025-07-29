@@ -26,8 +26,13 @@ public class HotelController {
     @GetMapping("/question")
     public Flux<String> recommendMovies1(@RequestParam("question") String question, Model model) throws Exception {
         System.out.println(question);
-        // Fetch similar movies using vector store
-        List<Document> results = vectorStore.similaritySearch(SearchRequest.builder().query(question).similarityThreshold(0.5).topK(1).build());
+        // Fetch similar data using vector store
+        List<Document> results = vectorStore.similaritySearch(
+                SearchRequest.builder()
+                        .query(question)
+                        .similarityThreshold(0.5) // 유사도(1이 제일 높음)
+                        .topK(1) // 높은 유사도 후보중에 제일 높은것 단 하나 취득
+                        .build());
         System.out.println(results.size());
 
         String template = """
@@ -46,7 +51,7 @@ public class HotelController {
                 .user(promptUserSpec -> promptUserSpec.text(template)
                         .param("context", results)
                         .param("question", question))
-                .stream()
+                .stream() // chunk 단위의 stream 방식으로 보냄
                 .content();
     }
 }
