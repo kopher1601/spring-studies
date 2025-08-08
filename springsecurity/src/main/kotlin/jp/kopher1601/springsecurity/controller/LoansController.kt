@@ -4,11 +4,11 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class WelcomeController {
+class LoansController {
 
-    @GetMapping("/welcome")
-    fun sayWelcome(): String {
-        return "Welcome to Kopher1601's Spring Security Demo."
+    @GetMapping("/myLoans")
+    fun getLoansDetails(): String {
+        return "Here are the loan details from the DB"
     }
 
 }
