@@ -10,8 +10,10 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
+import org.springframework.security.provisioning.JdbcUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker
+import javax.sql.DataSource
 
 @Configuration
 class ProjectSecurityConfig {
@@ -29,24 +31,25 @@ class ProjectSecurityConfig {
     }
 
     @Bean
-    fun userDetailsService(): UserDetailsService {
-        val user = User.withUsername("user")
+    fun userDetailsService(dataSource: DataSource): UserDetailsService {
+//        val user = User.withUsername("user")
             // PasswordEncoder 를 설정하고 아무것도 패스워드에 prefix 로 지정하지 않으면 BCrypt 를 사용한다.
             // PasswordEncoderFactories 확인
             // NoOpPassworEncoder 사용
-            .password("{noop}User!!@1234")
-            .authorities("read")
-            .build()
+//            .password("{noop}User!!@1234")
+//            .authorities("read")
+//            .build()
 
-        val admin = User.withUsername("admin")
+//        val admin = User.withUsername("admin")
             // 기본값이 bcrypt 이기에 지정하지 않아도 돼지만 알기 쉽게 하기 위해 지정
             // BcryptPasswordEncoder 를 사용한다.
             // !Admin!!@4321
-            .password("{bcrypt}\$2a\$12\$uFMRFsj3qUPPTHoa2jXICehC8kizIXSKXtVNv9rUbV6rVX.rl1hxC")
-            .authorities("admin")
-            .build()
+//            .password("{bcrypt}\$2a\$12\$uFMRFsj3qUPPTHoa2jXICehC8kizIXSKXtVNv9rUbV6rVX.rl1hxC")
+//            .authorities("admin")
+//            .build()
 
-        return InMemoryUserDetailsManager(user,admin)
+//        return InMemoryUserDetailsManager(user,admin)
+        return JdbcUserDetailsManager(dataSource)
     }
 
     @Bean
