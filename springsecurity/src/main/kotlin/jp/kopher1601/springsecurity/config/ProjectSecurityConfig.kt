@@ -5,31 +5,29 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.password.CompromisedPasswordChecker
 import org.springframework.security.config.Customizer.withDefaults
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.provisioning.JdbcUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker
-import javax.sql.DataSource
 
 @Configuration
 class ProjectSecurityConfig {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+        http.csrf { it.disable() } // 스프링 부트가 기본 csrf 체크를 하기 때문에 비활성화 (POST, PUT, DELETE 요청에서 기본적으로 csrf 체크가 진행된다)
         http.formLogin(withDefaults())
         http.httpBasic(withDefaults())
         http.authorizeHttpRequests { requests -> requests
             .requestMatchers("/myAccount","/myBalance","/myCards","/myLoans").authenticated()
-            .requestMatchers("/notices", "/contact", "/error").permitAll()
+            .requestMatchers("/notices", "/contact", "/error", "/register").permitAll()
         }
 
         return http.build()
     }
 
-    @Bean
-    fun userDetailsService(dataSource: DataSource): UserDetailsService {
+//    @Bean
+//    fun userDetailsService(dataSource: DataSource): UserDetailsService {
 //        val user = User.withUsername("user")
             // PasswordEncoder 를 설정하고 아무것도 패스워드에 prefix 로 지정하지 않으면 BCrypt 를 사용한다.
             // PasswordEncoderFactories 확인
@@ -47,8 +45,8 @@ class ProjectSecurityConfig {
 //            .build()
 
 //        return InMemoryUserDetailsManager(user,admin)
-        return JdbcUserDetailsManager(dataSource)
-    }
+//        return JdbcUserDetailsManager(dataSource)
+//    }
 
     @Bean
     fun passwordEncoder(): PasswordEncoder {

@@ -9,7 +9,7 @@ import jakarta.persistence.Id
 class Customer (
     val email: String,
 
-    val pwd: String,
+    var pwd: String,
 
     val role: String,
 
