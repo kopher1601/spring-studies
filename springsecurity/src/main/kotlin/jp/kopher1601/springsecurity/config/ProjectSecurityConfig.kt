@@ -19,13 +19,14 @@ class ProjectSecurityConfig {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+        http.sessionManagement { ssm -> ssm.invalidSessionUrl("/invalidSession") }
         http.csrf { it.disable() } // 스프링 부트가 기본 csrf 체크를 하기 때문에 비활성화 (POST, PUT, DELETE 요청에서 기본적으로 csrf 체크가 진행된다)
         http.redirectToHttps{it.disable()}
         http.formLogin(withDefaults())
         http.httpBasic{basic -> basic.authenticationEntryPoint(CustomBasicAuthenticationEntryPoint())}
         http.authorizeHttpRequests { requests -> requests
             .requestMatchers("/myAccount","/myBalance","/myCards","/myLoans").authenticated()
-            .requestMatchers("/notices", "/contact", "/error", "/register").permitAll()
+            .requestMatchers("/notices", "/contact", "/error", "/register", "/invalidSession").permitAll()
         }
         // HttpBasic 같은 로컬레벨이 아니라 Global 레벨이다
         http.exceptionHandling { ex -> ex.accessDeniedHandler(CustomAccessDeniedHandler()) }
