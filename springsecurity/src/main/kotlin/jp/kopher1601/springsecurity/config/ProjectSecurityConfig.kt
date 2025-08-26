@@ -1,5 +1,6 @@
 package jp.kopher1601.springsecurity.config
 
+import jp.kopher1601.springsecurity.exceptionhandling.CustomAccessDeniedHandler
 import jp.kopher1601.springsecurity.exceptionhandling.CustomBasicAuthenticationEntryPoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -26,6 +27,8 @@ class ProjectSecurityConfig {
             .requestMatchers("/myAccount","/myBalance","/myCards","/myLoans").authenticated()
             .requestMatchers("/notices", "/contact", "/error", "/register").permitAll()
         }
+        // HttpBasic 같은 로컬레벨이 아니라 Global 레벨이다
+        http.exceptionHandling { ex -> ex.accessDeniedHandler(CustomAccessDeniedHandler()) }
 
         return http.build()
     }
