@@ -19,7 +19,11 @@ class ProjectSecurityProdConfig {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http.sessionManagement { ssm -> ssm.invalidSessionUrl("/invalidSession") }
+        http.sessionManagement { ssm ->
+            ssm.invalidSessionUrl("/invalidSession")
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(true)
+        }
         http.csrf { it.disable() } // 스프링 부트가 기본 csrf 체크를 하기 때문에 비활성화 (POST, PUT, DELETE 요청에서 기본적으로 csrf 체크가 진행된다)
         http.redirectToHttps(withDefaults());
         http.formLogin(withDefaults())
