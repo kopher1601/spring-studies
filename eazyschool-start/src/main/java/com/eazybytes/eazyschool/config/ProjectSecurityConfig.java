@@ -21,10 +21,15 @@ public class ProjectSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf((csrf) -> csrf.disable())
-                .authorizeHttpRequests((requests) -> requests.requestMatchers("/dashboard").permitAll()
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/dashboard").authenticated()
                         .requestMatchers("/", "/home", "/holidays/**", "/contact", "/saveMsg",
-                                "/courses", "/about", "/assets/**").permitAll())
-                .formLogin(Customizer.withDefaults())
+                                "/courses", "/about", "/assets/**", "/login").permitAll())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .usernameParameter("username") // custom 할 수 있음 defaultValue = "username"
+                        .passwordParameter("password") // custom 할 수 있음 defaultValue = "password"
+                        .defaultSuccessUrl("/dashboard", true))
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
