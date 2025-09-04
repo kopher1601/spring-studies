@@ -43,6 +43,13 @@ public class ProjectSecurityConfig {
                         .successHandler(authenticationSuccessHandler) // defaultSuccessUrl, failureUrl 보다 핸들러가 우선순위가 높다
                         .failureHandler(authenticationFailureHandler)
                 )
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/login?logout=true")
+                        // 로그아웃할 때 로그인 작업 중에 생성된 http session을 삭제한다.
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID")
+                )
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
