@@ -1,10 +1,14 @@
 package com.eazybytes.eazyschool.config;
 
+import com.eazybytes.eazyschool.handler.CustomAuthenticationFailureHandler;
+import com.eazybytes.eazyschool.handler.CustomAuthenticationSuccessHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,12 +19,17 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker;
 
 @Configuration
+@RequiredArgsConstructor
 public class ProjectSecurityConfig {
+
+    private final CustomAuthenticationSuccessHandler authenticationSuccessHandler;
+    private final CustomAuthenticationFailureHandler authenticationFailureHandler;
+
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf((csrf) -> csrf.disable())
+        http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/dashboard").authenticated()
                         .requestMatchers("/", "/home", "/holidays/**", "/contact", "/saveMsg",
@@ -29,7 +38,11 @@ public class ProjectSecurityConfig {
                         .loginPage("/login")
                         .usernameParameter("username") // custom 할 수 있음 defaultValue = "username"
                         .passwordParameter("password") // custom 할 수 있음 defaultValue = "password"
-                        .defaultSuccessUrl("/dashboard", true))
+                        .defaultSuccessUrl("/dashboard", true)
+                        .failureUrl("/login?error=true")
+                        .successHandler(authenticationSuccessHandler) // defaultSuccessUrl, failureUrl 보다 핸들러가 우선순위가 높다
+                        .failureHandler(authenticationFailureHandler)
+                )
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
