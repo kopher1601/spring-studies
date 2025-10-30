@@ -2,6 +2,7 @@ package jp.kopher.springsecurityinaction.controllers
 
 import org.springframework.scheduling.annotation.Async
 import org.springframework.security.concurrent.DelegatingSecurityContextCallable
+import org.springframework.security.concurrent.DelegatingSecurityContextExecutorService
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.GetMapping
@@ -35,8 +36,25 @@ class HelloController {
 
         val e = Executors.newCachedThreadPool()
         try {
+            // タスクを Decorate する方法での解決
             val contextTask = DelegatingSecurityContextCallable(task)
             return "Ciao, " + e.submit(contextTask).get() + "!"
+        } finally {
+            e.shutdown()
+        }
+    }
+
+    @GetMapping("/hola")
+    fun hola(): String {
+        val task = Callable {
+            val context = SecurityContextHolder.getContext()
+            context.authentication.name
+        }
+
+        var e = Executors.newCachedThreadPool()
+        e = DelegatingSecurityContextExecutorService(e)
+        try {
+            return "Hola, " + e.submit(task).get() + "!"
         } finally {
             e.shutdown()
         }
