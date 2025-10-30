@@ -1,35 +1,23 @@
 package jp.kopher.springsecurityinaction.config
 
-import org.springframework.beans.factory.InitializingBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.scheduling.annotation.EnableAsync
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.UserDetailsService
-import org.springframework.security.crypto.password.NoOpPasswordEncoder
-import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.provisioning.JdbcUserDetailsManager
-import javax.sql.DataSource
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.web.SecurityFilterChain
 
-
-@EnableAsync
 @Configuration
 class ProjectConfig {
 
     @Bean
-    fun userDetailsService(dataSource: DataSource): UserDetailsService {
-        return JdbcUserDetailsManager(dataSource)
-    }
-
-    @Bean
-    fun passwordEncoder(): PasswordEncoder {
-        return NoOpPasswordEncoder.getInstance()
-    }
-
-    @Bean
-    fun initializingBean(): InitializingBean {
-        return InitializingBean {
-            SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL)
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+        http.httpBasic{
+            it.realmName("OTHER")
+            // 이름에 혼동의 여지가 있지만 401 에러가 났을 경우 불리는 곳이다.
+            it.authenticationEntryPoint(CustomEntryPoint())
         }
+        http.authorizeHttpRequests{
+            it.anyRequest().authenticated()
+        }
+        return http.build()
     }
 }
