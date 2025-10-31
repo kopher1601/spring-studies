@@ -2,27 +2,32 @@ package jp.kopher.springsecurityinaction.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.AuthenticationFailureHandler
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 
 @Configuration
-class ProjectConfig(
-    private val successHandler: AuthenticationSuccessHandler,
-    private val failureHandler: AuthenticationFailureHandler,
-) {
+class ProjectConfig {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.formLogin{
-            it.successHandler(successHandler)
-            it.failureHandler(failureHandler)
+            it.defaultSuccessUrl("/main", true)
         }
         http.authorizeHttpRequests{
             it.anyRequest().authenticated()
         }
         return http.build()
+    }
+
+    @Bean
+    fun bCryptPasswordEncoder(): BCryptPasswordEncoder {
+        return BCryptPasswordEncoder()
+    }
+
+    @Bean
+    fun sCryptPasswordEncoder(): SCryptPasswordEncoder {
+        return SCryptPasswordEncoder.defaultsForSpringSecurity_v5_8()
     }
 }
