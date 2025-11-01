@@ -18,7 +18,7 @@ class ProjectConfig {
     fun securityFilterChain(http:HttpSecurity): SecurityFilterChain {
         http.httpBasic(Customizer.withDefaults())
         http.authorizeHttpRequests{
-            it.anyRequest().hasAuthority("WRITE")
+            it.anyRequest().hasRole("ADMIN")
         }
         return http.build()
     }
@@ -29,11 +29,11 @@ class ProjectConfig {
 
         val user1 = User.withUsername("john")
             .password("12345")
-            .authorities("READ")
+            .roles("ADMIN")
             .build()
         val user2 = User.withUsername("jane")
             .password("12345")
-            .authorities("WRITE")
+            .roles("MANAGER")
             .build()
 
         manager.createUser(user1)
