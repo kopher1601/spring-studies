@@ -10,4 +10,14 @@ class HelloController {
     fun hello(): String {
         return "Hello World!"
     }
+
+    @GetMapping("/ciao")
+    fun ciao(): String {
+        return "Ciao Mondo!"
+    }
+
+    @GetMapping("/hola")
+    fun hola(): String {
+        return "Hola!"
+    }
 }

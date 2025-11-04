@@ -15,10 +15,12 @@ import org.springframework.security.web.SecurityFilterChain
 class ProjectConfig {
 
     @Bean
-    fun securityFilterChain(http:HttpSecurity): SecurityFilterChain {
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.httpBasic(Customizer.withDefaults())
-        http.authorizeHttpRequests{
-            it.anyRequest().hasRole("ADMIN")
+        http.authorizeHttpRequests {
+            it.requestMatchers("/hello").hasRole("ADMIN")
+                .requestMatchers("/ciao").hasRole("MANAGER")
+                .anyRequest().permitAll()
         }
         return http.build()
     }
