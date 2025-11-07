@@ -1,6 +1,6 @@
 package jp.kopher.springsecurityinaction.config
 
-import jp.kopher.springsecurityinaction.filters.StaticKeyAuthenticationFilter
+import jp.kopher.springsecurityinaction.filters.AuthenticationLoggingFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -9,12 +9,11 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 @Configuration
 class ProjectConfig(
-    private val staticKeyAuthenticationFilter: StaticKeyAuthenticationFilter,
 ) {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http.addFilterAt(staticKeyAuthenticationFilter, BasicAuthenticationFilter::class.java)
+        http.addFilterBefore(AuthenticationLoggingFilter(), BasicAuthenticationFilter::class.java)
             .authorizeHttpRequests {
                 it.anyRequest().permitAll()
             }
