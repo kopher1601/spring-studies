@@ -20,6 +20,7 @@ class ProjectConfig(
         }.authorizeHttpRequests {
             it.anyRequest().authenticated()
         }
+        http.csrf { it.ignoringRequestMatchers("/ciao") }
         return http.build()
     }
 
