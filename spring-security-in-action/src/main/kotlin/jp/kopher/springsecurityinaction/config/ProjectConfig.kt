@@ -15,30 +15,10 @@ class ProjectConfig(
 ) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http.formLogin { form ->
-            form.defaultSuccessUrl("/main", true)
-        }.authorizeHttpRequests {
-            it.anyRequest().authenticated()
+        http.csrf { it.disable() }
+        http.authorizeHttpRequests {
+            it.anyRequest().permitAll()
         }
-        http.csrf { it.ignoringRequestMatchers("/ciao") }
         return http.build()
-    }
-
-    @Bean
-    fun userDetailsService(): UserDetailsService {
-        InMemoryUserDetailsManager().let { manager ->
-            val u1 = User.withUsername("mary")
-                .password("12345")
-                .authorities("READ")
-                .build()
-
-            manager.createUser(u1)
-            return manager
-        }
-    }
-
-    @Bean
-    fun passwordEncoder(): PasswordEncoder {
-        return NoOpPasswordEncoder.getInstance()
     }
 }
