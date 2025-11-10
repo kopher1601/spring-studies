@@ -1,5 +1,6 @@
 package jp.kopher.springsecurityinaction.model
 
-class Document(
+class Product(
+    val name: String,
     val owner: String,
 )
