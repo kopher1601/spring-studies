@@ -6,13 +6,13 @@ import org.springframework.boot.runApplication
 @SpringBootApplication
 class SpringBootInPracticeApplication
 
+private val log = org.slf4j.LoggerFactory.getLogger(SpringBootInPracticeApplication::class.java)
+
 fun main(args: Array<String>) {
-    runApplication<SpringBootInPracticeApplication>(*args) {
-        setDefaultProperties(
-            mapOf(
-                "spring.config.on-not-found" to "ignore"
-            )
-        )
+
+    val application = runApplication<SpringBootInPracticeApplication>(*args)
+    application.getBean(DbConfiguration::class.java).let {
+        log.info(it.toString())
     }
 }
 
