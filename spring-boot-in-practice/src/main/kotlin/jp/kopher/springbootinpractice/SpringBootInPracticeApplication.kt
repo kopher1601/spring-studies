@@ -7,5 +7,12 @@ import org.springframework.boot.runApplication
 class SpringBootInPracticeApplication
 
 fun main(args: Array<String>) {
-    runApplication<SpringBootInPracticeApplication>(*args)
+    runApplication<SpringBootInPracticeApplication>(*args) {
+        setDefaultProperties(
+            mapOf(
+                "spring.config.on-not-found" to "ignore"
+            )
+        )
+    }
 }
+
