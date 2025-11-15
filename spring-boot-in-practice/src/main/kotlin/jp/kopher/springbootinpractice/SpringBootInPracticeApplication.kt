@@ -1,18 +1,23 @@
 package jp.kopher.springbootinpractice
 
-import jp.kopher.springbootinpractice.properties.AppProperties
+import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
+import org.springframework.context.annotation.Bean
 
 @SpringBootApplication
-@EnableConfigurationProperties(AppProperties::class)
-class SpringBootInPracticeApplication
+class SpringBootInPracticeApplication {
+    private val log = org.slf4j.LoggerFactory.getLogger(SpringBootInPracticeApplication::class.java)
 
-private val log = org.slf4j.LoggerFactory.getLogger(SpringBootInPracticeApplication::class.java)
+    @Bean
+    fun commandLineRunner(): CommandLineRunner {
+        return CommandLineRunner {
+            log.info("CommandLineRunner")
+        }
+    }
+}
 
 fun main(args: Array<String>) {
-
-    val application = runApplication<SpringBootInPracticeApplication>(*args)
+    runApplication<SpringBootInPracticeApplication>(*args)
 }
 
