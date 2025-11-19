@@ -3,15 +3,16 @@ package jp.kopher.springprinciple
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
-abstract class PaymentService {
+class PaymentService(
+    private val exRateProvider: WebApiExRateProvider = WebApiExRateProvider()
+) {
 
     fun prepare(
         orderId: Long,
         currency: String,
         foreignCurrencyAmount: BigDecimal,
     ): Payment {
-
-        val exRate = getExRate(currency)
+        val exRate = exRateProvider.getWebExRate(currency)
 
         val convertedAmount = foreignCurrencyAmount.multiply(exRate)
 
@@ -26,6 +27,4 @@ abstract class PaymentService {
             validUntil = validUntil,
         )
     }
-
-    abstract fun getExRate(currency: String): BigDecimal
 }

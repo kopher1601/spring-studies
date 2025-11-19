@@ -6,7 +6,7 @@ class Client {
 }
 
 fun main() {
-    val paymentService = SimpleExRatePaymentService()
+    val paymentService = PaymentService()
     val payment = paymentService.prepare(100, "USD", BigDecimal.valueOf(50.7))
     println("paymentService = $payment")
 }

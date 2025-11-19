@@ -2,8 +2,8 @@ package jp.kopher.springprinciple
 
 import java.math.BigDecimal
 
-class SimpleExRatePaymentService: PaymentService() {
-    override fun getExRate(currency: String): BigDecimal {
+class SimpleExRateProvider {
+    fun getExRate(currency: String): BigDecimal {
         if (currency == "USD") {
             return BigDecimal.valueOf(1000)
         }

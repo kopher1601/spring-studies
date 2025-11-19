@@ -7,8 +7,8 @@ import java.math.BigDecimal
 import java.net.URL
 import java.util.stream.Collectors
 
-class WebApiExRatePaymentService : PaymentService() {
-    override fun getExRate(currency: String): BigDecimal {
+class WebApiExRateProvider {
+    fun getWebExRate(currency: String): BigDecimal {
         val url = URL(" https://open.er-api.com/v6/latest/${currency}")
         val connection = url.openConnection()
         val br = BufferedReader(InputStreamReader(connection.getInputStream(), "UTF-8"))
@@ -17,7 +17,6 @@ class WebApiExRatePaymentService : PaymentService() {
 
         val mapper = jacksonObjectMapper()
         val data = mapper.readValue(response, ExRateData::class.java)
-        val exRate = data.rates["KRW"] ?: BigDecimal.ZERO
-        return exRate
+        return data.rates["KRW"] ?: BigDecimal.ZERO
     }
 }
