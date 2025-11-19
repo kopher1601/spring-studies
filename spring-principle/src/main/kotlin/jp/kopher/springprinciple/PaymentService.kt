@@ -4,7 +4,7 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 
 class PaymentService(
-    private val exRateProvider: WebApiExRateProvider = WebApiExRateProvider()
+    private val exRateProvider: ExRateProvider = WebApiExRateProvider()
 ) {
 
     fun prepare(
@@ -12,7 +12,7 @@ class PaymentService(
         currency: String,
         foreignCurrencyAmount: BigDecimal,
     ): Payment {
-        val exRate = exRateProvider.getWebExRate(currency)
+        val exRate = exRateProvider.getExRate(currency)
 
         val convertedAmount = foreignCurrencyAmount.multiply(exRate)
 
