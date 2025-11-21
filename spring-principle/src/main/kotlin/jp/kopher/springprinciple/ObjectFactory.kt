@@ -1,11 +1,19 @@
 package jp.kopher.springprinciple
 
-class ObjectFactory {
-    fun paymentService(): PaymentService {
-        return PaymentService(exRateProvider())
-    }
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.Configuration
 
-    private fun exRateProvider(): ExRateProvider {
-        return WebApiExRateProvider()
-    }
+@Configuration
+@ComponentScan
+class ObjectFactory {
+//    @Bean
+//    fun paymentService(): PaymentService {
+//        return PaymentService(exRateProvider())
+//    }
+//
+//    @Bean
+//    fun exRateProvider(): ExRateProvider {
+//        return SimpleExRateProvider()
+//    }
 }

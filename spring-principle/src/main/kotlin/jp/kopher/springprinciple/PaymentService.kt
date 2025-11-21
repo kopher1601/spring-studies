@@ -1,8 +1,10 @@
 package jp.kopher.springprinciple
 
+import org.springframework.stereotype.Component
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
+@Component
 class PaymentService(
     private val exRateProvider: ExRateProvider,
 ) {
