@@ -22,10 +22,27 @@ class MemberRepositoryTest(
             age = 2,
         )
 
+        // when
         val resultRows = memberRepository.save(member)
 
         assertThat(resultRows[Members.id]).isNotNull()
         assertThat(resultRows[Members.name]).isEqualTo("Exposed")
         assertThat(resultRows[Members.age]).isEqualTo(2)
+    }
+
+    @Test
+    fun `ID を指定して会員を検索できる`() {
+        val member = Member(
+            name = "Kotlin",
+            age = 2,
+        )
+        val savedMember = memberRepository.save(member)
+
+        // when
+        val foundMember = memberRepository.findById(savedMember[Members.id])
+
+        assertThat(foundMember).isNotNull()
+        assertThat(foundMember?.name).isEqualTo("Kotlin")
+        assertThat(foundMember?.age).isEqualTo(2)
     }
 }

@@ -21,4 +21,14 @@ class MemberRepository {
         return Members.selectAll().where { Members.id eq id }.single()
     }
 
+    fun findById(id: Long): Member? {
+        return Members.selectAll().where{ Members.id eq id }.singleOrNull()?.let {
+            return Member(
+                id = it[Members.id],
+                name = it[Members.name],
+                age = it[Members.age],
+            )
+        }
+    }
+
 }
