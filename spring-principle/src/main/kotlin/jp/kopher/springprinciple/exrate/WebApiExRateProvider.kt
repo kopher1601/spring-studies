@@ -1,6 +1,7 @@
-package jp.kopher.springprinciple
+package jp.kopher.springprinciple.exrate
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import jp.kopher.springprinciple.payment.ExRateProvider
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.math.BigDecimal

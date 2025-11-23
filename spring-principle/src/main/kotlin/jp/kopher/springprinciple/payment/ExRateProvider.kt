@@ -1,4 +1,4 @@
-package jp.kopher.springprinciple
+package jp.kopher.springprinciple.payment
 
 import java.math.BigDecimal
 

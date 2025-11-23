@@ -1,5 +1,6 @@
 package jp.kopher.springprinciple
 
+import jp.kopher.springprinciple.payment.PaymentService
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit

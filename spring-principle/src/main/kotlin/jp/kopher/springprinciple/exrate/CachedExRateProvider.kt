@@ -1,5 +1,6 @@
-package jp.kopher.springprinciple
+package jp.kopher.springprinciple.exrate
 
+import jp.kopher.springprinciple.payment.ExRateProvider
 import java.math.BigDecimal
 import java.time.LocalDateTime
 

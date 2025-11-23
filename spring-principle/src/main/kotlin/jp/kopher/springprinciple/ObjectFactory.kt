@@ -1,5 +1,9 @@
 package jp.kopher.springprinciple
 
+import jp.kopher.springprinciple.exrate.CachedExRateProvider
+import jp.kopher.springprinciple.payment.ExRateProvider
+import jp.kopher.springprinciple.exrate.WebApiExRateProvider
+import jp.kopher.springprinciple.payment.PaymentService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
