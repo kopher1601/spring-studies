@@ -1,6 +1,6 @@
 package jp.kopher.springprinciple.payment
 
-import jp.kopher.springprinciple.TestObjectFactory
+import jp.kopher.springprinciple.TestPaymentConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -8,13 +8,15 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestConstructor
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.math.BigDecimal
+import java.time.Clock
 import java.time.LocalDateTime
 
 @ExtendWith(SpringExtension::class)
-@ContextConfiguration(classes = [TestObjectFactory::class])
+@ContextConfiguration(classes = [TestPaymentConfig::class])
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 class PaymentServiceSpringTest(
     private val paymentService: PaymentService,
+    private val clock: Clock,
 ) {
 
     @Test
@@ -27,6 +29,16 @@ class PaymentServiceSpringTest(
                 LocalDateTime.now()
             )
         }
+    }
+
+    @Test
+    fun validUntil() {
+        val payment = paymentService.prepare(1L, "USD", BigDecimal.TEN)
+
+        val now = LocalDateTime.now(clock)
+        val expectedValidUntil = now.plusMinutes(30)
+
+        assertThat(payment.validUntil).isAfter(expectedValidUntil)
     }
 
 }
