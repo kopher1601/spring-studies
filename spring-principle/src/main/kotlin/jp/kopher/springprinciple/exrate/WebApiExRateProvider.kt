@@ -12,16 +12,23 @@ import java.util.stream.Collectors
 class WebApiExRateProvider: ExRateProvider {
     override fun getExRate(currency: String): BigDecimal {
         val uri = URI(" https://open.er-api.com/v6/latest/${currency}")
-        val connection = uri.toURL().openConnection()
-        val br = BufferedReader(InputStreamReader(connection.getInputStream(), "UTF-8"))
-        val response = br.lines().collect(Collectors.joining())
-        br.close()
 
+        val response = executeApi(uri)
+
+        return parseExRate(response)
+    }
+
+    private fun parseExRate(response: String): BigDecimal {
         val mapper = jacksonObjectMapper()
         val data = mapper.readValue(response, ExRateData::class.java)
 
-        println("data.rates[\"KRW\"] = ${data.rates["KRW"]}")
-
         return data.rates["KRW"] ?: BigDecimal.ZERO
+    }
+
+    private fun executeApi(uri: URI): String {
+        val connection = uri.toURL().openConnection()
+        return BufferedReader(InputStreamReader(connection.getInputStream(), "UTF-8")).use {
+            it.lines().collect(Collectors.joining())
+        }
     }
 }
