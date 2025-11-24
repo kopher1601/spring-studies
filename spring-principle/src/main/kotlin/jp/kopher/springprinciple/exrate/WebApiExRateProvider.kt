@@ -1,6 +1,7 @@
 package jp.kopher.springprinciple.exrate
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import jp.kopher.springprinciple.api.SimpleApiExecutor
 import jp.kopher.springprinciple.payment.ExRateProvider
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -18,7 +19,7 @@ class WebApiExRateProvider: ExRateProvider {
     private fun runApiForExRate(url: String): BigDecimal {
         val uri = URI(url)
 
-        val response = executeApi(uri)
+        val response = SimpleApiExecutor().execute(uri)
 
         return extractExRate(response)
     }
@@ -30,10 +31,4 @@ class WebApiExRateProvider: ExRateProvider {
         return data.rates["KRW"] ?: BigDecimal.ZERO
     }
 
-    private fun executeApi(uri: URI): String {
-        val connection = uri.toURL().openConnection()
-        return BufferedReader(InputStreamReader(connection.getInputStream(), "UTF-8")).use {
-            it.lines().collect(Collectors.joining())
-        }
-    }
 }
