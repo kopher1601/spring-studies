@@ -26,7 +26,7 @@ class PaymentServiceSpringTest(
             assertThat(payment.exRate).isEqualByComparingTo(1_000.toBigDecimal())
             assertThat(payment.convertedAmount).isEqualByComparingTo(10_000.toBigDecimal())
             assertThat(payment.validUntil).isAfter(
-                LocalDateTime.now()
+                LocalDateTime.now(clock)
             )
         }
     }

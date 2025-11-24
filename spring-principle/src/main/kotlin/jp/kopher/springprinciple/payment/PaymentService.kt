@@ -18,17 +18,12 @@ class PaymentService(
     ): Payment {
         val exRate = exRateProvider.getExRate(currency)
 
-        val convertedAmount = foreignCurrencyAmount.multiply(exRate)
-
-        val validUntil = LocalDateTime.now().plusMinutes(30)
-
-        return Payment(
+        return Payment.createPrepared(
             orderId = orderId,
             currency = currency,
             foreignCurrencyAmount = foreignCurrencyAmount,
             exRate = exRate,
-            convertedAmount = convertedAmount,
-            validUntil = validUntil,
+            now = LocalDateTime.now(clock),
         )
     }
 }
