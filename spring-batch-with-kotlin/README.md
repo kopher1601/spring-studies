@@ -75,3 +75,45 @@ public Step zombieCleanupStep() {
             .build();
 }
 ```
+
+### Chunk
+
+チャンク（Chunk）とは、データを一定の単位で分割した塊のことを指します。Spring Batchでデータ基盤の処理方式を「チャンク指向処理」と呼ぶ理由は、読み込み（Read）、処理（Process）、書き込み（Write）の作業を、一定のサイズに分割されたデータ塊（チャンク）を対象に行うためです。
+Spring Batchに触れて扱うことになる大部分のバッチ作業、特にデータを扱う作業は、読み込み → 処理 → 書き込みという共通のパターンを持っています。Spring Batchもデータを扱う際はこのパターンに従います。そして、この方式をSpring Batchではチャンク指向処理と呼びます。
+では、このパターンはSpring Batchでどのように具体化されるのでしょうか？
+Spring Batchはこれを3つのコンポーネントで実装しています。
+すなわち、ItemReader、ItemProcessor、ItemWriter です。
+#### ItemReader
+
+```java
+public interface ItemReader<T> {
+    T read() throws Exception, 
+        UnexpectedInputException, 
+        ParseException, 
+        NonTransientResourceException;
+}
+```
+read() メソッドの戻り値の型に注目してください。read() メソッドはアイテムを1つずつ返します。ここでアイテムとは、ファイルの1行、またはデータベースの1行（row）に相当するデータ1件を意味します。
+ItemReader が null を返すときがチャンク指向処理Stepの終了時点であるという点を必ず記憶してください。これはSpring BatchがStepの完了を判断する核心的な条件です。
+
+#### ItemProcessor
+
+```java
+public interface ItemProcessor<I, O> {
+    O process(I item) throws Exception;
+}
+```
+
+process() メソッドが null を返すと、その入力データは処理フローから除外されます。言い換えれば、ItemWriter に渡されません。有効でないデータや処理する必要のないデータを除外する際に使用します。
+ItemProcessor は省略可能です。つまり、Stepがデータを読み込んで即座に書き込むように構成することもできます。
+
+#### ItemWriter
+
+```java
+public interface ItemWriter<T> {
+    void write(List<? extends T> items) throws Exception;
+}
+```
+`ItemWriter` は `ItemProcessor` が生成した結果を受け取り、望ましい方式で最終的に保存/出力します。（データをDBにINSERT、ファイルにWRITE、メッセージキューにPUSHなど） 
+
+`ItemWriter` はデータを1件ずつ書き込みません。Chunk単位でまとめて一度にデータを書き込みます。`write()` メソッドのパラメータ型が `Chunk` であることに注目しましょう。 と がアイテムを1つずつ返し、入力として受け取るのとは異なり、 はデータ塊（Chunk）を一度に入力として受け取り、一度に書き込みます。
