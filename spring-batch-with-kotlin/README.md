@@ -12,6 +12,8 @@ Spring Batch は `Job` と `Step` の実行情報（メタデータ）をデー�
 
 メタデータの保存やバッチジョブの実行など、Spring Batch の **すべての作業はトランザクション内で処理**されます。このために、バッチコアコンポーネントと私たちの Job で共通して使用する `PlatformTransactionManager` Bean を登録する必要があります。
 
+## Job
+
 Spring Batch は `Job` を実行する際、Spring コンテナから `Job` Bean を探して実行するため、`Job` は必ず Bean として登録するようにします。
 ```kotlin
 @Bean
@@ -46,3 +48,30 @@ StepBuilder の最初のパラメータとしては Step の識別子を指定�
 
 Step の実際の動作は tasklet() メソッドを通じて定義されます。
 
+Spring BatchのStepは、主に次の2つの処理モデルに分けられます。
+
+- チャンク指向処理 (Chunk-Oriented Processing) aka COP
+- タスクレット指向処理 (Tasklet-Oriented Processing) aka TOP
+
+### Tasklet
+
+タスクレット（Tasklet）指向処理モデルは、Spring Batchにおける最も基本的なStep実装方式であり、比較的複雑ではない単純な作業を実行する際に使用されます。
+
+Spring Batchは、Taskletの execute() が呼び出されるたびに新しいトランザクションを開始し、execute() の実行が終了して RepeatStatus が返されると、そのトランザクションをコミットします。
+
+しかし、一般的にTaskletでDBトランザクション管理が必要なケースはそれほど多くありません。すべてのTaskletがデータベース作業を含むわけではないからです。例えば、ファイルの整理、外部APIの呼び出し、単純な通知の送信といった作業であれば、DBトランザクションを考慮する必要はありません。
+
+このような場合、実際のDBコネクションを管理する一般的な PlatformTransactionManager 実装体を使用する代わりに、ResourcelessTransactionManager というオプションを検討できます。
+
+ResourcelessTransactionManager は、no-op（何もしない）方式で動作する PlatformTransactionManager 実装体であり、これを使用することで不要なDBトランザクション処理を省略できます。
+
+ResourcelessTransactionManager をStepに適用するには、次のように ResourcelessTransactionManager インスタンスを tasklet() メソッドに渡します。
+
+```java
+@Bean
+public Step zombieCleanupStep() {
+    return new StepBuilder("zombieCleanupStep", jobRepository)
+            .tasklet(zombieProcessCleanupTasklet(), new ResourcelessTransactionManager())
+            .build();
+}
+```
