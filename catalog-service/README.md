@@ -17,3 +17,15 @@ minikube image load catalog-service:0.0.1-SNAPSHOT
 ```bash
 minikube stop
 ```
+
+## Kubernetes
+
+#### **deployment(배포) 생성**
+
+```bash
+# deployment 생성
+kubectl create deployment catalog-service --image=catalog-service:0.0.1-SNAPSHOT
+
+# deployment 확인
+kubectl get deployment
+```
