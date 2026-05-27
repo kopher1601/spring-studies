@@ -1,5 +1,6 @@
 package kopher.hellospring;
 
+import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
@@ -11,6 +12,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.stream.Collectors;
 
+@Component
 public class WebApiExRateProvider implements ExRateProvider {
     @Override
     public BigDecimal getWebExRate(String currency) throws IOException {
