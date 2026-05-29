@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 
 public class SimpleExRateProvider implements ExRateProvider{
     @Override
-    public BigDecimal getWebExRate(String currency) throws IOException {
+    public BigDecimal getExRate(String currency) throws IOException {
         if (currency.equals("USD")) {
             return BigDecimal.valueOf(1000);
         }

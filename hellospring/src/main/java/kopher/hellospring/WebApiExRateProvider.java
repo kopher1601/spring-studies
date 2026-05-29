@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 public class WebApiExRateProvider implements ExRateProvider {
     @Override
-    public BigDecimal getWebExRate(String currency) throws IOException {
+    public BigDecimal getExRate(String currency) throws IOException {
         URL url = URI.create("https://open.er-api.com/v6/latest/" + currency).toURL();
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -26,6 +26,9 @@ public class WebApiExRateProvider implements ExRateProvider {
         System.out.println("response = " + response);
         ObjectMapper mapper = new ObjectMapper();
         ExRateData data = mapper.readValue(response, ExRateData.class);
+
+        System.out.println("data.rates().get(\"KRW\") = " + data.rates().get("KRW"));
+
         return data.rates().get("KRW");
     }
 }
