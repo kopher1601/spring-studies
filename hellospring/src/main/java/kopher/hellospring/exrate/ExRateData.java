@@ -1,4 +1,4 @@
-package kopher.hellospring;
+package kopher.hellospring.exrate;
 
 import java.math.BigDecimal;
 import java.util.Map;

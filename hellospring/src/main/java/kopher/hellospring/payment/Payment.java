@@ -1,4 +1,4 @@
-package kopher.hellospring;
+package kopher.hellospring.payment;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

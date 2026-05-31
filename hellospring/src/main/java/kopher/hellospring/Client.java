@@ -1,5 +1,7 @@
 package kopher.hellospring;
 
+import kopher.hellospring.payment.Payment;
+import kopher.hellospring.payment.PaymentService;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

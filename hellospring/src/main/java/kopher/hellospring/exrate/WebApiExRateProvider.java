@@ -1,5 +1,6 @@
-package kopher.hellospring;
+package kopher.hellospring.exrate;
 
+import kopher.hellospring.payment.ExRateProvider;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 

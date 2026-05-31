@@ -1,5 +1,9 @@
 package kopher.hellospring;
 
+import kopher.hellospring.exrate.CachedExRateProvider;
+import kopher.hellospring.payment.ExRateProvider;
+import kopher.hellospring.exrate.WebApiExRateProvider;
+import kopher.hellospring.payment.PaymentService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
