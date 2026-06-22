@@ -6,10 +6,6 @@ import java.math.BigDecimal;
 public class ExRateProviderStub implements ExRateProvider{
     private BigDecimal exRate;
 
-    public BigDecimal getExRate() {
-        return exRate;
-    }
-
     public void setExRate(BigDecimal exRate) {
         this.exRate = exRate;
     }
