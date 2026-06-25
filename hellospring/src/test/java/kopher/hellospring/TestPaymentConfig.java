@@ -1,7 +1,5 @@
 package kopher.hellospring;
 
-import kopher.hellospring.exrate.CachedExRateProvider;
-import kopher.hellospring.exrate.WebApiExRateProvider;
 import kopher.hellospring.payment.ExRateProvider;
 import kopher.hellospring.payment.ExRateProviderStub;
 import kopher.hellospring.payment.PaymentService;
@@ -10,19 +8,27 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 
 @Configuration
 @ComponentScan
-public class TestObjectFactory {
+public class TestPaymentConfig {
 
     @Bean
     public PaymentService paymentService() {
-        return new PaymentService(exRateProvider());
+        return new PaymentService(exRateProvider(), clock());
     }
 
     @Bean
     public ExRateProvider exRateProvider() {
         return new ExRateProviderStub(BigDecimal.valueOf(1_000));
+    }
+
+    @Bean
+    public Clock clock() {
+        return Clock.fixed(Instant.now(), ZoneId.systemDefault());
     }
 
 }
